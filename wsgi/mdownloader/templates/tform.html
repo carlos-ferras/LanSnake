@@ -1,0 +1,28 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+	<title>MDownloader</title>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+	<meta name="generator" content="Geany 1.22" />
+    <style type="text/css">
+        input#dwx {
+            width: 450px;
+        }
+    </style>
+</head>
+
+<body>
+    <form id="descargar" action="/downloaded/" method="post">
+        {% csrf_token %}
+        <label width = 200px for="dwx">Download:</label>
+        <input id="dwx" type="text" name="dwx"/>
+        <label for="mail">Mail:</label>
+        <input id="mail" type="text" name="mail"/>
+        <input type="submit" name="descargar" value="Download"  class="boton" />        
+    </form>
+    <p>{{ message }}</p>
+</body>
+
+</html>
