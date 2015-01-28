@@ -29,7 +29,7 @@ def errmail(subject,message,ato):
 def testMail():
    print "sending throut gmail"
    username = "TuFanatico5@gmail.com"
-   password = "0152351411a"
+   password = "bmfkhmpzitaslgnp"
    fromaddr = "TuFanatico5@gmail.com"
    toaddr = "cmferras@estudiantes.uci.cu"
    msg = "join the quark"
@@ -51,7 +51,7 @@ def home(request):
         return render_to_response('tform.html',{'message':'ready....'},context_instance=c)
 
 def downloadit(url,mail,start,end):
-	#try:
+    try:
         i = start
         req = urllib2.Request(url, headers={'Range':'bytes='+str(start*m1)+'-'})
         response = urllib2.urlopen(req)
@@ -68,8 +68,8 @@ def downloadit(url,mail,start,end):
             i += 1
             l += len(buf)
         errmail('term','Sent!!!\n packets from '+str(start)+' to '+str(end)+' were sent with '+url,mail)
-	#~ except:
-		#~ errmail('MDownloader Error','Error Found while downloading '+str(i)+' part of '+url,mail)
+    except:
+        errmail('MDownloader Error','Error Found while downloading '+str(i)+' part of '+url,mail)
 
 
 def deskargar(request):
@@ -102,7 +102,7 @@ def downloaded(request):
     if size > packs:
         packs += 1
     packs = int(packs)
-    #testMail()
+    testMail()
     #errmail('MDownloader Information','You are about to download '+url+'. This is an advice message.',mail)
     return render_to_response('dform.html',{'dwx':url,'mail':mail,'packs':packs,'interval':'[0..'+str(packs-1)+']','size':size},context_instance=c)
 
@@ -121,7 +121,7 @@ def wipeAccount(request):
 
     m = imaplib.IMAP4_SSL("imap.gmail.com")  # server to connect to
     msg+= "Connecting to mailbox...\n"
-    m.login('TuFanatico5@gmail.com', '0152351411a')
+    m.login('TuFanatico5@gmail.com', 'bmfkhmpzitaslgnp')
 
     m.select('[Gmail]/Sent Mail')  # required to perform search, m.list() for all lables, '[Gmail]/Sent Mail'
     before_date = (datetime.date.today() - datetime.timedelta(365)).strftime("%d-%b-%Y")  # date string, 04-Jan-2013
