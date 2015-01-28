@@ -11,8 +11,6 @@ from time import sleep
 from os.path import basename
 from threading import Thread
 
-MAX=0
-
 def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for x in range(size))
 
@@ -44,7 +42,7 @@ def testMail():
    server.quit()
    print "sended"
 
-m1 = 1024*1024.0
+m1 = 1024*1024
 
 
 def home(request):
@@ -53,29 +51,23 @@ def home(request):
         return render_to_response('tform.html',{'message':'ready....'},context_instance=c)
 
 def downloadit(url,mail,start,end):
-	
-    #~ if end>MAX:
-	#~ end=MAX
     try:
         i = start
-        #req = urllib2.Request(url, headers={'Range':'bytes='+str(start*m1)+'-'})
-	req = urllib2.Request(url)
+        req = urllib2.Request(url, headers={'Range':'bytes='+str(start*m1)+'-'})
         response = urllib2.urlopen(req)
-	#response = urllib2.urlopen(url)
         url = response.geturl()
         errmail('recv','Starting with '+url+'       ['+str(start)+'..'+str(end)+']',mail)
         buf = response.read(m1)
-        l = len(buf)	
-	
-	while i<= end:
+        l = len(buf)
+        while buf and i<= end:
             nurl = basename(url)+'.'+str(i)
             smail(nurl,'MDownloader',mail,id_generator(20),buf)
-            #errmail('sent','sent '+nurl,mail)
+            errmail('sent','sent '+nurl+' with total length: '+str(l),mail)
             sleep(0.1)
             buf = response.read(m1)
             i += 1
             l += len(buf)
-	errmail('term','Sent!!!\n packets from '+str(start)+' to '+str(end)+' were sent with '+url,mail)
+        errmail('term','Sent!!!\n packets from '+str(start)+' to '+str(end)+' were sent with '+url,mail)
     except:
         errmail('MDownloader Error','Error Found while downloading '+str(i)+' part of '+url,mail)
 
@@ -105,14 +97,13 @@ def downloaded(request):
 
     d = urllib2.urlopen(url)
     url = d.geturl()
-    size = int(d.info()['Content-Length'])/m1
+    size = int(d.info()['Content-Length'])/(1024.0*1024)
     packs = round(size)
     if size > packs:
         packs += 1
     packs = int(packs)
-    MAX=packs-1
     #errmail('MDownloader Information','You are about to download '+url+'. This is an advice message.',mail)
-    return render_to_response('dform.html',{'dwx':url,'mail':mail,'packs':packs,'interval':'[0..'+str(MAX)+']','size':size},context_instance=c)
+    return render_to_response('dform.html',{'dwx':url,'mail':mail,'packs':packs,'interval':'[0..'+str(packs-1)+']','size':size},context_instance=c)
 
 #    except:
 #        return render_to_response('tform.html',{'message':'Error downloading '+url},context_instance=c)
