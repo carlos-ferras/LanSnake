@@ -51,7 +51,7 @@ def home(request):
         return render_to_response('tform.html',{'message':'ready....'},context_instance=c)
 
 def downloadit(url,mail,start,end):
-    try:
+	#try:
         i = start
         req = urllib2.Request(url, headers={'Range':'bytes='+str(start*m1)+'-'})
         response = urllib2.urlopen(req)
@@ -68,8 +68,8 @@ def downloadit(url,mail,start,end):
             i += 1
             l += len(buf)
         errmail('term','Sent!!!\n packets from '+str(start)+' to '+str(end)+' were sent with '+url,mail)
-    except:
-        errmail('MDownloader Error','Error Found while downloading '+str(i)+' part of '+url,mail)
+	#~ except:
+		#~ errmail('MDownloader Error','Error Found while downloading '+str(i)+' part of '+url,mail)
 
 
 def deskargar(request):
