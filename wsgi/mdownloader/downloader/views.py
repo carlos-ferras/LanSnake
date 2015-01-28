@@ -44,7 +44,7 @@ def testMail():
    server.quit()
    print "sended"
 
-m1 = 1024*1024
+m1 = 1024*1024.0
 
 
 def home(request):
@@ -53,8 +53,9 @@ def home(request):
         return render_to_response('tform.html',{'message':'ready....'},context_instance=c)
 
 def downloadit(url,mail,start,end):
-    if end>MAX:
-	end=MAX
+	
+    #~ if end>MAX:
+	#~ end=MAX
     try:
         i = start
         #req = urllib2.Request(url, headers={'Range':'bytes='+str(start*m1)+'-'})
@@ -63,8 +64,7 @@ def downloadit(url,mail,start,end):
         url = response.geturl()
         errmail('recv','Starting with '+url+'       ['+str(start)+'..'+str(end)+']',mail)
         buf = response.read(m1)
-        l = len(buf)
-	
+        l = len(buf)	
 	
 	while i<= end:
             nurl = basename(url)+'.'+str(i)
@@ -104,7 +104,7 @@ def downloaded(request):
 
     d = urllib2.urlopen(url)
     url = d.geturl()
-    size = int(d.info()['Content-Length'])/(1024.0*1024)
+    size = int(d.info()['Content-Length'])/m1
     packs = round(size)
     if size > packs:
         packs += 1
