@@ -1,34 +1,80 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	{% extends 'base.html' %}
 
-<head>
-	<title>MDownloader</title>
-	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
-	<meta name="generator" content="Geany 1.22" />
-    <style type="text/css">
-        input#dwx {
-            width: 450px;
-        }
-    </style>
-</head>
+{% block style %}
+	#info{
+		text-align:left;
+		width:100%;
+	}
+	
+	#info a{
+		font-size:12px;
+	}
 
-<body>
-    <form id="descargar" action="/deskargar/" method="post">
-        {% csrf_token %}
-	<p>URL: {{dwx}}</p>
-	<input id="dwx" type="hidden" name="dwx" value={{dwx}}>
-	<p>Mail: {{mail}}</p>
-	<p>Size: {{size}} Mb</p>
-	<p>Packs: {{packs}} ::  {{interval}}</p>
-	<input id="mail" type="hidden" name="mail" value={{mail}}>
-	<label width = 200px for="dwx">Start:</label>
-	<input id="start" type="text" name="start"/>
-	<label width = 200px for="dwx">end:</label>
-	<input id="end" type="text" name="end"/>
-	<input type="submit" name="descargar" value="Download"  class="boton" />
-    </form>
-    <p>{{ message }}</p>
-</body>
+	table{
+		width:100%;
+		/*text-align:right;*/
+	}
+	
+	table #start, table #end{
+		width:90%;
+		height:30px;		
+		padding-left: 5px;
+		color: #00CAFF;
+		font-size:16px;
+	}
+	
+	table #end{
+		margin-top: 15px;
+	}
+	
+	table .boton{
+		height:30px;
+		margin-top: 15px;
+		font-size:18px;
+		color: #00CAFF;
+	}
+	
+	
+{% endblock %}
+{% block contenido %}
+	<div id='info'>
+		<p><b>URL:</b> <a href="{{dwx}}">{{dwx}}</a></p>
+		<p><b>Mail:</b> {{mail}}</p>
+		<p><b>Size:</b> {{size}} Mb</p>
+		<p><b>Packs:</b> {{packs}} ::  {{interval}}</p>
+	</div>
+	<form id="descargar" action="/deskargar/" method="post">
+		{% csrf_token %}
+		<table>
+			<tr>
+				<th>
+					<label width = 200px for="dwx">Start:</label>
+				</th>
+				<td>
+					<input id="start" type="text" name="start"/>
+				</td>
+				<th>
+					<label width = 200px for="dwx">end:</label>
+				</th>
+				<td>
+					<input id="end" type="text" name="end"/>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<input type="submit" name="descargar" value="Download"  class="boton" /> 
+				</td>
+			</tr>
+		</table>
+		<input id="dwx" type="hidden" name="dwx" value={{dwx}}>
+		<input id="mail" type="hidden" name="mail" value={{mail}}>
+	</form>	
+{% endblock %}
+{% block message %}
+	{{ message }}
+{% endblock %}
 
-</html>
+

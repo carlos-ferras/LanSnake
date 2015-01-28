@@ -10,6 +10,7 @@ EMAIL_PORT = 587
 
 EMAIL_HOST_USER = 'TuFanatico5@gmail.com'
 
+
 DEFAULT_FROM_EMAIL = 'TuFanatico5@gmail.com'
 SERVER_EMAIL = 'TuFanatico5@gmail.com'
 

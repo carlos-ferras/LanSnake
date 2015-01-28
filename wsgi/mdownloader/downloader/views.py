@@ -1,106 +1,106 @@
-from django.http import HttpResponse, HttpResponseRedirect
 from django.http import HttpRequest
-from django.template import Context, loader, RequestContext
+from django.template import   RequestContext
 from django.shortcuts import render_to_response
-from django.core.urlresolvers import reverse
 import urllib2
-
 import string
 import random
-from time import sleep
 from os.path import basename
 from threading import Thread
-
-def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
-    return ''.join(random.choice(chars) for x in range(size))
-
 from django.core.mail import send_mail, EmailMessage
+
+
+m1 = 1024*1024
+
+def home(request,msg='',dwx='',mail=''):
+    c = RequestContext(request)
+    if msg=='':
+	    msg='ready....'
+    return render_to_response('tform.html',{'mail':mail,'dwx':dwx,'message':msg},context_instance=c)
+
+
+def data(request,msg=''):
+    c = RequestContext(request)
+    url=''
+    mail=''
+    if request.method == 'POST':
+	    try:
+		    url = request.POST["dwx"]
+		    mail = request.POST["mail"]
+
+		    d = urllib2.urlopen(url)
+		    url = d.geturl()
+		    size = int(d.info()['Content-Length'])/(1024.0*1024)
+		    packs = round(size)
+		    if size > packs:
+			packs += 1
+		    packs = int(packs)
+		    return render_to_response('dform.html',{'message':msg,'dwx':url,'mail':mail,'packs':packs,'interval':'[0..'+str(packs-1)+']','size':size},context_instance=c)
+	    except:
+		    pass
+    return home(request,msg='bad url ...',mail=mail,dwx=url)
+
+
+def deskargar(request):
+    if request.method == 'POST':
+	    url = request.POST["dwx"]
+	    mail = request.POST["mail"]
+	    
+	    req = HttpRequest()
+	    req.method = 'POST'
+	    req.POST = {'dwx':url,'mail':mail}
+	    
+	    try:
+		    start = int(request.POST["start"])
+		    end = int(request.POST["end"])
+	    except:
+		msg='start and end values must be integers ...'
+	        response = data(req,msg)
+		return response
+
+	    s = Thread(target=downloadit,args=[url,mail,start,end])
+	    s.setDaemon(True)
+	    s.start()
+		
+	    msg='last download: from '+str(start)+' to '+str(end)+' ...'	    
+	    response = data(req,msg)
+	    return response
+    return home(request)
+
+
+def downloadit(url,mail,start,end):
+	try:
+		i = start
+		req = urllib2.Request(url, headers={'Range':'bytes='+str(start*m1)+'-'})
+		response = urllib2.urlopen(req)
+		
+		url = response.geturl()
+		errmail('recv','Starting with '+url+'       ['+str(start)+'..'+str(end)+']',mail)
+		buf = response.read(m1)
+		#l = len(buf)
+		while buf and i<=end:
+		    nurl = basename(url)+'.'+str(i)
+		    smail(nurl,'LanSnake',mail,id_generator(20),buf)
+		    buf = response.read(m1)
+		    i += 1
+		    #l += len(buf)
+		errmail('term','Sent!!!\n packets from '+str(start)+' to '+str(end)+' were sent with '+url,mail)
+	except:
+		errmail('LanSnake Error','Error Found while downloading '+str(i)+' part of '+url,mail)
+
+
+def errmail(subject,message,ato):
+    email = EmailMessage(subject, message, to=[ato,])
+    email.send()
 
 
 def smail(subject,message,ato,nurl,buf):
     email = EmailMessage(subject, message, to=[ato,])
     email.attach(nurl,buf,'application/octet-stream')
     email.send()
+    
 
-def errmail(subject,message,ato):
-    email = EmailMessage(subject, message, to=[ato,])
-    email.send()
-
-def testMail():
-   print "sending throut gmail"
-   username = "TuFanatico5@gmail.com"
-   password = "bmfkhmpzitaslgnp"
-   fromaddr = "TuFanatico5@gmail.com"
-   toaddr = "cmferras@estudiantes.uci.cu"
-   msg = "join the quark"
-
-   import smtplib
-
-   server = smtplib.SMTP_SSL('smtp.googlemail.com:465')
-   server.login(username, password)
-   server.sendmail(fromaddr, [toaddr], msg)
-   server.quit()
-   print "sended"
-
-m1 = 1024*1024
-
-def home(request):
-    c = RequestContext(request)
-    if request.method == 'GET':
-        return render_to_response('tform.html',{'message':'ready....'},context_instance=c)
-
-def downloadit(url,mail,start,end):
-	#try:
-        i = start
-        req = urllib2.Request(url, headers={'Range':'bytes='+str(start*m1)+'-'})
-        response = urllib2.urlopen(req)
-	
-        url = response.geturl()
-        errmail('recv','Starting with '+url+'       ['+str(start)+'..'+str(end)+']',mail)
-        buf = response.read(m1)
-        #l = len(buf)
-        while buf and i<= int(response.info()['Content-Length'])/(m1):
-            nurl = basename(url)+'.'+str(i)
-            smail(nurl,'MDownloader',mail,id_generator(20),buf)
-            # sleep(0.1)
-            buf = response.read(m1)
-            i += 1
-            #l += len(buf)
-        errmail('term','Sent!!!\n packets from '+str(start)+' to '+str(end)+' were sent with '+url,mail)
-	#~ except:
-        #~ errmail('MDownloader Error','Error Found while downloading '+str(i)+' part of '+url,mail)
-
-
-def deskargar(request):
-    req = HttpRequest()
-    req.method = 'POST'
-    url = request.POST["dwx"]
-    mail = request.POST["mail"]
-    start = int(request.POST["start"])
-    end = int(request.POST["end"])
-
-    s = Thread(target=downloadit,args=[url,mail,start,end])
-    s.setDaemon(True)
-    s.start()
-
-    req.POST = {'dwx':url,'mail':mail}
-    response = downloaded(req)
-    return response
-
-
-def downloaded(request):
-    c = RequestContext(request)
-    url = request.POST["dwx"]
-    mail = request.POST["mail"]
-
-    d = urllib2.urlopen(url)
-    url = d.geturl()
-    size = int(d.info()['Content-Length'])/(1024.0*1024)
-    packs = round(size)
-    if size > packs:
-        packs += 1
-    packs = int(packs)
-    return render_to_response('dform.html',{'dwx':url,'mail':mail,'packs':packs,'interval':'[0..'+str(packs-1)+']','size':size},context_instance=c)
+def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
+    return ''.join(random.choice(chars) for x in range(size))
 
 
 def wipeAccount(request):
@@ -109,7 +109,7 @@ def wipeAccount(request):
     c = RequestContext(request)
 
     msg = ''
-
+	
     m = imaplib.IMAP4_SSL("imap.gmail.com")
     msg+= "Connecting to mailbox...\n"
     m.login('TuFanatico5@gmail.com', 'bmfkhmpzitaslgnp')
