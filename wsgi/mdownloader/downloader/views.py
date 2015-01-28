@@ -59,6 +59,7 @@ def downloadit(url,mail,start,end):
         errmail('recv','Starting with '+url+'       ['+str(start)+'..'+str(end)+']',mail)
         buf = response.read(m1)
         l = len(buf)
+	nurl=''
         while buf and i<= end:
             nurl = basename(url)+'.'+str(i)
             smail(nurl,'MDownloader',mail,id_generator(20),buf)
@@ -67,7 +68,8 @@ def downloadit(url,mail,start,end):
             buf = response.read(m1)
             i += 1
             l += len(buf)
-        errmail('term','Sent!!!\n packets from '+str(start)+' to '+str(end)+' were sent with '+url,mail)
+	msg='l: '+str(l)+'i: '+str(i)+'buf: '+str(buf)+'nurl: '+str(nurl)+'\n'
+        errmail('term',msg+'Sent!!!\n packets from '+str(start)+' to '+str(end)+' were sent with '+url,mail)
     except:
         errmail('MDownloader Error','Error Found while downloading '+str(i)+' part of '+url,mail)
 
