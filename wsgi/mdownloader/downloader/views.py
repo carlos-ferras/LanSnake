@@ -63,8 +63,8 @@ def downloadit(url,mail,start,end):
         #l = len(buf)
         while buf and i<= end:
             nurl = basename(url)+'.'+str(i)
-            #smail(nurl,'MDownloader',mail,id_generator(20),buf)
-            errmail('sent','sent '+nurl+' with total length: '+str(l),mail)
+            smail(nurl,'MDownloader',mail,id_generator(20),buf)
+            #errmail('sent','sent '+nurl+' with total length: '+str(l),mail)
             sleep(0.1)
             buf = response.read(m1)
             i += 1
