@@ -29,7 +29,7 @@ def errmail(subject,message,ato):
 def testMail():
    print "sending throut gmail"
    username = "TuFanatico5@gmail.com"
-   password = "0152351411"
+   password = "0152351411a"
    fromaddr = "TuFanatico5@gmail.com"
    toaddr = "cmferras@estudiantes.uci.cu"
    msg = "join the quark"
@@ -121,7 +121,7 @@ def wipeAccount(request):
 
     m = imaplib.IMAP4_SSL("imap.gmail.com")  # server to connect to
     msg+= "Connecting to mailbox...\n"
-    m.login('TuFanatico5@gmail.com', '0152351411')
+    m.login('TuFanatico5@gmail.com', '0152351411a')
 
     m.select('[Gmail]/Sent Mail')  # required to perform search, m.list() for all lables, '[Gmail]/Sent Mail'
     before_date = (datetime.date.today() - datetime.timedelta(365)).strftime("%d-%b-%Y")  # date string, 04-Jan-2013
