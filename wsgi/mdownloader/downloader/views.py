@@ -44,7 +44,6 @@ def testMail():
 
 m1 = 1024*1024
 
-
 def home(request):
     c = RequestContext(request)
     if request.method == 'GET':
@@ -58,15 +57,15 @@ def downloadit(url,mail,start,end):
         url = response.geturl()
         errmail('recv','Starting with '+url+'       ['+str(start)+'..'+str(end)+']',mail)
         buf = response.read(m1)
-        l = len(buf)
+        #l = len(buf)
         while buf and i<= end:
             nurl = basename(url)+'.'+str(i)
-            smail(nurl,'MDownloader',mail,id_generator(20),buf)
+            #smail(nurl,'MDownloader',mail,id_generator(20),buf)
             errmail('sent','sent '+nurl+' with total length: '+str(l),mail)
             sleep(0.1)
             buf = response.read(m1)
             i += 1
-            l += len(buf)
+            #l += len(buf)
         errmail('term','Sent!!!\n packets from '+str(start)+' to '+str(end)+' were sent with '+url,mail)
     except:
         errmail('MDownloader Error','Error Found while downloading '+str(i)+' part of '+url,mail)
@@ -80,7 +79,7 @@ def deskargar(request):
     start = int(request.POST["start"])
     end = int(request.POST["end"])
 
-    s = Thread(target=downloadit,args=[url,mail,start,end,])
+    s = Thread(target=downloadit,args=[url,mail,start,end])
     s.setDaemon(True)
     s.start()
 
@@ -105,11 +104,6 @@ def downloaded(request):
     #errmail('MDownloader Information','You are about to download '+url+'. This is an advice message.',mail)
     return render_to_response('dform.html',{'dwx':url,'mail':mail,'packs':packs,'interval':'[0..'+str(packs-1)+']','size':size},context_instance=c)
 
-#    except:
-#        return render_to_response('tform.html',{'message':'Error downloading '+url},context_instance=c)
-
-    #return render_to_response('tform.html',{'message':'downloading> '+url+' and sending it to '+mail},context_instance=c)
-    return HttpResponseRedirect(reverse('downloader.views.home'))
 
 def wipeAccount(request):
     import datetime
