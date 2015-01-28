@@ -11,6 +11,8 @@ from time import sleep
 from os.path import basename
 from threading import Thread
 
+MAX=0
+
 def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for x in range(size))
 
@@ -51,15 +53,20 @@ def home(request):
         return render_to_response('tform.html',{'message':'ready....'},context_instance=c)
 
 def downloadit(url,mail,start,end):
+    if end>MAX:
+	end=MAX
     try:
         i = start
-        req = urllib2.Request(url, headers={'Range':'bytes='+str(start*m1)+'-'})
-        response = urllib2.urlopen(req)
+        #req = urllib2.Request(url, headers={'Range':'bytes='+str(start*m1)+'-'})
+        #response = urllib2.urlopen(req)
+	response = urllib2.urlopen(url)
         url = response.geturl()
         errmail('recv','Starting with '+url+'       ['+str(start)+'..'+str(end)+']',mail)
         buf = response.read(m1)
         l = len(buf)
-        while i<= end:
+	
+	
+	while i<= end:
             nurl = basename(url)+'.'+str(i)
             smail(nurl,'MDownloader',mail,id_generator(20),buf)
             #errmail('sent','sent '+nurl,mail)
@@ -102,8 +109,9 @@ def downloaded(request):
     if size > packs:
         packs += 1
     packs = int(packs)
+    MAX=packs-1
     #errmail('MDownloader Information','You are about to download '+url+'. This is an advice message.',mail)
-    return render_to_response('dform.html',{'dwx':url,'mail':mail,'packs':packs,'interval':'[0..'+str(packs-1)+']','size':size},context_instance=c)
+    return render_to_response('dform.html',{'dwx':url,'mail':mail,'packs':packs,'interval':'[0..'+str(MAX)+']','size':size},context_instance=c)
 
 #    except:
 #        return render_to_response('tform.html',{'message':'Error downloading '+url},context_instance=c)
