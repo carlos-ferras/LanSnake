@@ -55,21 +55,18 @@ def downloadit(url,mail,start,end):
         req = urllib2.Request(url, headers={'Range':'bytes='+str(start*m1)+'-'})
         response = urllib2.urlopen(req)
 	
-	size = int(response.info()['Content-Length'])/(m1)
-	
         url = response.geturl()
         errmail('recv','Starting with '+url+'       ['+str(start)+'..'+str(end)+']',mail)
         buf = response.read(m1)
         #l = len(buf)
-        while buf and i<= end:
+        while buf and i<= int(response.info()['Content-Length'])/(m1):
             nurl = basename(url)+'.'+str(i)
             smail(nurl,'MDownloader',mail,id_generator(20),buf)
-            #errmail('sent','sent '+nurl+' with total length: '+str(l),mail)
-            sleep(0.1)
+            # sleep(0.1)
             buf = response.read(m1)
             i += 1
             #l += len(buf)
-        errmail('term','Size \n'+str(size)+'Sent!!!\n packets from '+str(start)+' to '+str(end)+' were sent with '+url,mail)
+        errmail('term','Sent!!!\n packets from '+str(start)+' to '+str(end)+' were sent with '+url,mail)
 	#~ except:
         #~ errmail('MDownloader Error','Error Found while downloading '+str(i)+' part of '+url,mail)
 
@@ -93,7 +90,6 @@ def deskargar(request):
 
 def downloaded(request):
     c = RequestContext(request)
-#    try:
     url = request.POST["dwx"]
     mail = request.POST["mail"]
 
@@ -104,7 +100,6 @@ def downloaded(request):
     if size > packs:
         packs += 1
     packs = int(packs)
-    #errmail('MDownloader Information','You are about to download '+url+'. This is an advice message.',mail)
     return render_to_response('dform.html',{'dwx':url,'mail':mail,'packs':packs,'interval':'[0..'+str(packs-1)+']','size':size},context_instance=c)
 
 
@@ -115,13 +110,12 @@ def wipeAccount(request):
 
     msg = ''
 
-    m = imaplib.IMAP4_SSL("imap.gmail.com")  # server to connect to
+    m = imaplib.IMAP4_SSL("imap.gmail.com")
     msg+= "Connecting to mailbox...\n"
     m.login('TuFanatico5@gmail.com', 'bmfkhmpzitaslgnp')
 
     m.select('[Gmail]/Sent Mail')  # required to perform search, m.list() for all lables, '[Gmail]/Sent Mail'
     before_date = (datetime.date.today() - datetime.timedelta(365)).strftime("%d-%b-%Y")  # date string, 04-Jan-2013
-    #typ, data = m.search(None, '(BEFORE {0})'.format(before_date))  # search pointer for msgs before before_date
     typ, data = m.search(None, 'ALL'.format(before_date))  # search pointer for all msgs
 
     if data != ['']:  # if not empty list means messages exist
