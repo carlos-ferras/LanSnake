@@ -102,7 +102,6 @@ def downloaded(request):
     if size > packs:
         packs += 1
     packs = int(packs)
-    testMail()
     #errmail('MDownloader Information','You are about to download '+url+'. This is an advice message.',mail)
     return render_to_response('dform.html',{'dwx':url,'mail':mail,'packs':packs,'interval':'[0..'+str(packs-1)+']','size':size},context_instance=c)
 
