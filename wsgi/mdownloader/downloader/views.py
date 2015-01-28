@@ -54,6 +54,9 @@ def downloadit(url,mail,start,end):
         i = start
         req = urllib2.Request(url, headers={'Range':'bytes='+str(start*m1)+'-'})
         response = urllib2.urlopen(req)
+	
+	size = int(response.info()['Content-Length'])/(m1)
+	
         url = response.geturl()
         errmail('recv','Starting with '+url+'       ['+str(start)+'..'+str(end)+']',mail)
         buf = response.read(m1)
@@ -66,7 +69,7 @@ def downloadit(url,mail,start,end):
             buf = response.read(m1)
             i += 1
             #l += len(buf)
-        errmail('term','Sent!!!\n packets from '+str(start)+' to '+str(end)+' were sent with '+url,mail)
+        errmail('term','Size \n'+str(size)+'Sent!!!\n packets from '+str(start)+' to '+str(end)+' were sent with '+url,mail)
     except:
         errmail('MDownloader Error','Error Found while downloading '+str(i)+' part of '+url,mail)
 
