@@ -59,8 +59,9 @@ def downloadit(url,mail,start,end):
     try:
         i = start
         #req = urllib2.Request(url, headers={'Range':'bytes='+str(start*m1)+'-'})
-        #response = urllib2.urlopen(req)
-	response = urllib2.urlopen(url)
+	req = urllib2.Request(url)
+        response = urllib2.urlopen(req)
+	#response = urllib2.urlopen(url)
         url = response.geturl()
         errmail('recv','Starting with '+url+'       ['+str(start)+'..'+str(end)+']',mail)
         buf = response.read(m1)
