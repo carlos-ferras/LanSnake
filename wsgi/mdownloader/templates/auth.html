@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block style %}
+	table{
+		width:100%;
+		/*text-align:right;*/
+	}
+	
+	table #passw{
+		width:90%;
+		height:30px;		
+		padding-left: 5px;
+		color: #00CAFF;
+		font-size:16px;
+    	margin-top: 15px;
+	}
+
+	
+	table .boton{
+		height:30px;
+		margin-top: 15px;
+		font-size:18px;
+		color: #00CAFF;
+	}
+		
+{% endblock %}
+{% block contenido %}
+	<form id="auth" action="/" method="post">
+		{% csrf_token %}
+		<table>
+			<tr>
+				<th >
+					<label width = 200px for="passw">Password for Sender Mail:</label>
+				</th>
+				<td>
+					<input id="passw" type="password" name="passw" value='' />
+				</td>
+				<td>
+					<input type="submit" name="descargar" value="Next >>"  class="boton" /> 
+				</td>
+			</tr>
+		</table>
+	</form>	
+{% endblock %}
+{% block message %}
+	{{ message }}
+{% endblock %}
+
+

@@ -23,10 +23,7 @@ SERVER_EMAIL = 'TuFanatico5@gmail.com'
 DEFAULT_FROM_EMAIL = 'cmferras@estudiantes.uci.cu'
 SERVER_EMAIL = 'cmferras@estudiantes.uci.cu'
 
-
-"""EMAIL_HOST_PASSWORD = 'bmfkhmpzitaslgnp'"""
-EMAIL_HOST_PASSWORD='Krlos555*'
-
+EMAIL_HOST_PASSWORD = '~LanSnake~'
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),

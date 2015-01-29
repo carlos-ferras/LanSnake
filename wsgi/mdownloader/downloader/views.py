@@ -1,4 +1,4 @@
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponseRedirect
 from django.template import   RequestContext
 from django.shortcuts import render_to_response
 import urllib2
@@ -8,16 +8,46 @@ from os.path import basename
 from threading import Thread
 from django.core.mail import send_mail, EmailMessage
 from time import sleep
+from django.conf import settings
+from django.core.mail.backends.smtp import  EmailBackend
 
-m1 = 1024*1024
+m1 = 1024*1024 
+
+
+def isInside():
+	try:
+		back=EmailBackend()
+		back.open()
+		return True
+	except:
+		pass
+	return False
+	
+	
+def AUTH():
+	def decorador(fun):
+		def interna(self,*arg):
+			if isInside():
+				fun(self,*arg)
+			else:
+				return HttpResponseRedirect('/')
+		return interna
+	return decorador
+	
 
 def home(request,msg='',dwx='',mail=''):
-    c = RequestContext(request)
-    if msg=='':
-	    msg='ready....'
-    return render_to_response('tform.html',{'mail':mail,'dwx':dwx,'message':msg},context_instance=c)
+	c = RequestContext(request)
+	if isInside():		
+		if msg=='':
+			msg='ready....'
+		return render_to_response('tform.html',{'mail':mail,'dwx':dwx,'message':msg},context_instance=c)	
+	if request.method == 'POST':
+		settings.EMAIL_HOST_PASSWORD = str(request.POST["passw"])
+		return HttpResponseRedirect('/')
+	return render_to_response('auth.html',{},context_instance=c)	
 
 
+@AUTH()
 def data(request,msg=''):
     c = RequestContext(request)
     url=''
@@ -39,7 +69,7 @@ def data(request,msg=''):
 		    pass
     return home(request,msg='bad url ...',mail=mail,dwx=url)
 
-
+@AUTH()
 def deskargar(request):
     if request.method == 'POST':
 	    url = request.POST["dwx"]
@@ -56,7 +86,7 @@ def deskargar(request):
 		msg='start and end values must be integers ...'
 	        response = data(req,msg)
 		return response
-
+		
 	    s = Thread(target=downloadit,args=[url,mail,start,end])
 	    s.setDaemon(True)
 	    s.start()
@@ -104,7 +134,7 @@ def smail(subject,message,ato,nurl,buf):
 def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for x in range(size))
 
-
+@AUTH()
 def wipeAccount(request):
     import datetime
     import imaplib
@@ -114,7 +144,7 @@ def wipeAccount(request):
 	
     m = imaplib.IMAP4_SSL("imap.gmail.com")
     msg+= "Connecting to mailbox...\n"
-    m.login('TuFanatico5@gmail.com', 'bmfkhmpzitaslgnp')
+    m.login('TuFanatico5@gmail.com', str(settings.EMAIL_HOST_PASSWORD))
 
     m.select('[Gmail]/Sent Mail')  # required to perform search, m.list() for all lables, '[Gmail]/Sent Mail'
     before_date = (datetime.date.today() - datetime.timedelta(365)).strftime("%d-%b-%Y")  # date string, 04-Jan-2013
