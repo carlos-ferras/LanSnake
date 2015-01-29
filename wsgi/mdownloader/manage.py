@@ -1,11 +1,14 @@
 #!/usr/bin/env python
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import os
 import sys
 
 if __name__ == "__main__":
 =======
+=======
+>>>>>>> 25d23941864b8ee5fbef79e4f83b8629e1d22c59
 =======
 >>>>>>> 25d23941864b8ee5fbef79e4f83b8629e1d22c59
 """
@@ -28,6 +31,9 @@ import sys
 
 if __name__ == "__main__":
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 25d23941864b8ee5fbef79e4f83b8629e1d22c59
+=======
 >>>>>>> 25d23941864b8ee5fbef79e4f83b8629e1d22c59
 =======
 >>>>>>> 25d23941864b8ee5fbef79e4f83b8629e1d22c59

@@ -7,6 +7,7 @@ TEMPLATE_DEBUG = DEBUG
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
+<<<<<<< HEAD
 EMAIL_HOST_USER = 'TuFanatico5@gmail.com'
 <<<<<<< HEAD
 =======
@@ -15,6 +16,15 @@ EMAIL_HOST_USER = 'TuFanatico5@gmail.com'
 >>>>>>> 25d23941864b8ee5fbef79e4f83b8629e1d22c59
 DEFAULT_FROM_EMAIL = 'TuFanatico5@gmail.com'
 SERVER_EMAIL = 'TuFanatico5@gmail.com'
+=======
+
+EMAIL_HOST_USER = 'TuFanatico5@gmail.com'
+
+
+DEFAULT_FROM_EMAIL = 'TuFanatico5@gmail.com'
+SERVER_EMAIL = 'TuFanatico5@gmail.com'
+
+>>>>>>> 25d23941864b8ee5fbef79e4f83b8629e1d22c59
 EMAIL_HOST_PASSWORD = 'bmfkhmpzitaslgnp'
 
 

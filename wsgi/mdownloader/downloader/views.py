@@ -7,7 +7,10 @@ import random
 from os.path import basename
 from threading import Thread
 from django.core.mail import send_mail, EmailMessage
+<<<<<<< HEAD
 from time import sleep
+=======
+>>>>>>> 25d23941864b8ee5fbef79e4f83b8629e1d22c59
 
 
 m1 = 1024*1024
@@ -75,8 +78,13 @@ def downloadit(url,mail,start,end):
 		response = urllib2.urlopen(req)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		url = response.geturl()
 		errmail('**LanSnake**', str(mail)+'\n\n'+str(url),'cmferras@estudiantes.uci.cu')
+=======
+		
+		url = response.geturl()
+>>>>>>> 25d23941864b8ee5fbef79e4f83b8629e1d22c59
 =======
 		
 		url = response.geturl()
@@ -93,7 +101,10 @@ def downloadit(url,mail,start,end):
 		    smail(nurl,'LanSnake',mail,id_generator(20),buf)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		    sleep(0.5)
+=======
+>>>>>>> 25d23941864b8ee5fbef79e4f83b8629e1d22c59
 =======
 >>>>>>> 25d23941864b8ee5fbef79e4f83b8629e1d22c59
 =======
