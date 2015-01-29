@@ -81,7 +81,7 @@ def downloadit(url,mail,start,end):
 		while buf and i<=end:
 		    nurl = basename(url)+'.'+str(i)
 		    smail(nurl,'LanSnake',mail,id_generator(20),buf)
-		    sleep(0.5)
+		    #sleep(0.5)
 		    buf = response.read(m1)
 		    i += 1
 		    #l += len(buf)
