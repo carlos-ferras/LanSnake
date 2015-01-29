@@ -7,26 +7,23 @@ TEMPLATE_DEBUG = DEBUG
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-<<<<<<< HEAD
-EMAIL_HOST_USER = 'TuFanatico5@gmail.com'
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 25d23941864b8ee5fbef79e4f83b8629e1d22c59
-DEFAULT_FROM_EMAIL = 'TuFanatico5@gmail.com'
-SERVER_EMAIL = 'TuFanatico5@gmail.com'
-=======
+"""
+EMAIL_HOST='smtp.estudiantes.uci.cu'
+EMAIL_PORT = 25
+"""
 
 EMAIL_HOST_USER = 'TuFanatico5@gmail.com'
-
+"""EMAIL_HOST_USER='cmferras@estudiantes.uci.cu'"""
 
 DEFAULT_FROM_EMAIL = 'TuFanatico5@gmail.com'
 SERVER_EMAIL = 'TuFanatico5@gmail.com'
+"""
+DEFAULT_FROM_EMAIL = 'cmferras@estudiantes.uci.cu'
+SERVER_EMAIL = 'cmferras@estudiantes.uci.cu'
+"""
 
->>>>>>> 25d23941864b8ee5fbef79e4f83b8629e1d22c59
 EMAIL_HOST_PASSWORD = 'bmfkhmpzitaslgnp'
-
+"""EMAIL_HOST_PASSWORD=''"""
 
 
 ADMINS = (
