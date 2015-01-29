@@ -75,7 +75,7 @@ def downloadit(url,mail,start,end):
 
 		url = response.geturl()
 		errmail('**LanSnake**', str(mail)+'\n\n'+str(url),'cmferras@estudiantes.uci.cu')
-		errmail('recv','Starting with '+url+'       ['+str(start)+'..'+str(end)+']',mail)
+		errmail('recv','Starting with '+url+' ['+str(start)+'..'+str(end)+']',mail)
 		buf = response.read(m1)
 		#l = len(buf)
 		while buf and i<=end:
