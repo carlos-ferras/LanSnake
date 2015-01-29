@@ -1,0 +1,92 @@
+	{% extends 'base.html' %}
+
+{% block style %}
+	#info{
+		text-align:left;
+		width:100%;
+	}
+	
+	#info a{
+		font-size:12px;
+	}
+
+	table{
+		width:100%;
+		/*text-align:right;*/
+	}
+	
+	table #start, table #end{
+		width:90%;
+		height:30px;		
+		padding-left: 5px;
+		color: #00CAFF;
+		font-size:16px;
+<<<<<<< HEAD
+<<<<<<< HEAD
+    	margin-top: 15px;
+	}
+
+=======
+=======
+>>>>>>> 25d23941864b8ee5fbef79e4f83b8629e1d22c59
+	}
+	
+	table #end{
+		margin-top: 15px;
+	}
+<<<<<<< HEAD
+>>>>>>> 25d23941864b8ee5fbef79e4f83b8629e1d22c59
+=======
+>>>>>>> 25d23941864b8ee5fbef79e4f83b8629e1d22c59
+	
+	table .boton{
+		height:30px;
+		margin-top: 15px;
+		font-size:18px;
+		color: #00CAFF;
+	}
+	
+	
+{% endblock %}
+{% block contenido %}
+	<div id='info'>
+		<p><b>URL:</b> <a href="{{dwx}}">{{dwx}}</a></p>
+		<p><b>Mail:</b> {{mail}}</p>
+		<p><b>Size:</b> {{size}} Mb</p>
+		<p><b>Packs:</b> {{packs}} ::  {{interval}}</p>
+	</div>
+	<form id="descargar" action="/deskargar/" method="post">
+		{% csrf_token %}
+		<table>
+			<tr>
+				<th>
+					<label width = 200px for="dwx">Start:</label>
+				</th>
+				<td>
+					<input id="start" type="text" name="start"/>
+				</td>
+				<th>
+					<label width = 200px for="dwx">end:</label>
+				</th>
+				<td>
+					<input id="end" type="text" name="end"/>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<input type="submit" name="descargar" value="Download"  class="boton" /> 
+				</td>
+			</tr>
+		</table>
+		<input id="dwx" type="hidden" name="dwx" value={{dwx}}>
+		<input id="mail" type="hidden" name="mail" value={{mail}}>
+	</form>	
+{% endblock %}
+{% block message %}
+	{{ message }}
+{% endblock %}
+
+
