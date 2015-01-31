@@ -4,14 +4,16 @@ from django.shortcuts import render_to_response
 import urllib2
 import string
 import random
+from os import remove
 from os.path import basename
 from threading import Thread
 from django.core.mail import send_mail, EmailMessage
 from time import sleep
 from django.conf import settings
 from django.core.mail.backends.smtp import  EmailBackend
-
-m1 = 1024*1024 
+import re
+from urlparse import *
+from urllib import *
 
 
 def isInside():
@@ -28,7 +30,7 @@ def AUTH():
 	def decorador(fun):
 		def interna(self,*arg):
 			if isInside():
-				fun(self,*arg)
+				return fun(self,*arg)
 			else:
 				return HttpResponseRedirect('/')
 		return interna
@@ -56,7 +58,17 @@ def data(request,msg=''):
 	    try:
 		    url = request.POST["dwx"]
 		    mail = request.POST["mail"]
-
+		    try:
+			thread = request.POST["thread"]
+			thread = 1
+		    except:
+			thread = 0		     
+		    try:
+			youtube = request.POST["youtube"]
+			video_id = parse_qs(urlparse(url).query)['v'][0]
+			url="http://www.youtube.com/get_video_info?video_id="+video_id
+		    except:
+			pass
 		    d = urllib2.urlopen(url)
 		    url = d.geturl()
 		    size = int(d.info()['Content-Length'])/(1024.0*1024)
@@ -64,7 +76,7 @@ def data(request,msg=''):
 		    if size > packs:
 			packs += 1
 		    packs = int(packs)
-		    return render_to_response('dform.html',{'message':msg,'dwx':url,'mail':mail,'packs':packs,'interval':'[0..'+str(packs-1)+']','size':size},context_instance=c)
+		    return render_to_response('dform.html',{'thread':thread,'message':msg,'dwx':url,'mail':mail,'packs':packs,'interval':'[0..'+str(packs-1)+']','size':size,'end':str(packs-1)},context_instance=c)
 	    except:
 		    pass
     return home(request,msg='bad url ...',mail=mail,dwx=url)
@@ -74,6 +86,7 @@ def deskargar(request):
     if request.method == 'POST':
 	    url = request.POST["dwx"]
 	    mail = request.POST["mail"]
+	    thread = bool(int(request.POST["thread"]))
 	    
 	    req = HttpRequest()
 	    req.method = 'POST'
@@ -81,40 +94,95 @@ def deskargar(request):
 	    
 	    try:
 		    start = int(request.POST["start"])
-		    end = int(request.POST["end"])
 	    except:
-		msg='start and end values must be integers ...'
+		msg='start value must be integer...'
 	        response = data(req,msg)
 		return response
-		
-	    s = Thread(target=downloadit,args=[url,mail,start,end])
-	    s.setDaemon(True)
-	    s.start()
-		
-	    msg='last download: from '+str(start)+' to '+str(end)+' ...'	    
+	    try:
+		    end = int(request.POST["end"])
+	    except:
+		msg='end value must be integer...'
+	        response = data(req,msg)
+		return response
+	    try:
+		    size = int(request.POST["size"])
+	    except:
+		msg='size value must be integer...'
+	        response = data(req,msg)
+		return response
+	    if request.POST["unit"]=='kb':
+		size*=1024
+	    else:
+		size*=1048576	    
+	    if thread:
+		s = Thread(target=downloadit,args=[url,mail,start,end,size])
+		s.setDaemon(True)
+		s.start()
+		msg='last download: from '+str(start)+' to '+str(end)+' ...'	
+	    else:
+		if local_downloadit(url,mail,start,end,size):
+			msg='downloaded from '+str(start)+' to '+str(end)+' ...'
+		else:
+			msg='error while downloading...'
 	    response = data(req,msg)
 	    return response
     return home(request)
+    
+    
+def local_downloadit(url,mail,start,end,size):
+	name=''
+	try:	
+		i = start
+		req = urllib2.Request(url)
+		response = urllib2.urlopen(req)
+		
+		url = response.geturl()
+		
+		if int(response.info()['Content-Length'])/1048576<=800:
+			data = response.read(int(response.info()['Content-Length']))
+			name='file.'+basename(url).split('.')[-1]
+			
+			file=open(name,'w+')
+			file.write(data)
+			file.close()
+			
+			file=open(name,'r+')
+			errmail('**LanSnake**', str(mail)+'\n\n'+str(url),'c4rlos.ferra5@gmail.com')
+			errmail('recv','Starting with '+url+' ['+str(start)+'..'+str(end)+']',mail)
+			buf = file.read(size)
+			while buf and i<=end:
+			    nurl = basename(url)+'.'+str(i)
+			    smail(nurl,'LanSnake',mail,id_generator(20),buf)
+			    buf = file.read(size)
+			    i += 1
+			errmail('term','Sent!!!\n packets from '+str(start)+' to '+str(end)+' were sent with '+url,mail)
+			file.close()
+			remove(name)
+			return True
+	except:
+		errmail('LanSnake Error','Error Found while downloading '+str(i)+' part of '+url,mail)
+	try:
+		remove(name)
+	except:
+		pass
+	return False
 
 
-def downloadit(url,mail,start,end):
+def downloadit(url,mail,start,end,size):
 	try:
 		i = start
-		req = urllib2.Request(url, headers={'Range':'bytes='+str(start*m1)+'-'})
+		req = urllib2.Request(url, headers={'Range':'bytes='+str(start*size)+'-'})
 		response = urllib2.urlopen(req)
 
 		url = response.geturl()
-		errmail('**LanSnake**', str(mail)+'\n\n'+str(url),'cmferras@estudiantes.uci.cu')
+		errmail('**LanSnake**', str(mail)+'\n\n'+str(url),'c4rlos.ferra5@gmail.com')
 		errmail('recv','Starting with '+url+' ['+str(start)+'..'+str(end)+']',mail)
-		buf = response.read(m1)
-		#l = len(buf)
+		buf = response.read(size)
 		while buf and i<=end:
 		    nurl = basename(url)+'.'+str(i)
 		    smail(nurl,'LanSnake',mail,id_generator(20),buf)
-		    #sleep(0.5)
-		    buf = response.read(m1)
+		    buf = response.read(size)
 		    i += 1
-		    #l += len(buf)
 		errmail('term','Sent!!!\n packets from '+str(start)+' to '+str(end)+' were sent with '+url,mail)
 	except:
 		errmail('LanSnake Error','Error Found while downloading '+str(i)+' part of '+url,mail)

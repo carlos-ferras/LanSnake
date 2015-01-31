@@ -25,6 +25,7 @@ SERVER_EMAIL = 'cmferras@estudiantes.uci.cu'
 """
 EMAIL_HOST_PASSWORD = '~LanSnake~'
 
+
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )

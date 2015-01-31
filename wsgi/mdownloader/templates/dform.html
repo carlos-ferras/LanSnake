@@ -12,26 +12,35 @@
 
 	table{
 		width:100%;
-		/*text-align:right;*/
 	}
 	
-	table #start, table #end{
+	#start, #end{
 		width:90%;
 		height:30px;		
 		padding-left: 5px;
 		color: #00CAFF;
 		font-size:16px;
-    	margin-top: 15px;
+		margin-top: 15px;
 	}
-
+	
+	#size *{
+		width:45%;
+		height:30px;		
+		padding-left: 5px;
+		color: #00CAFF;
+		font-size:16px;
+		margin-top: 15px;
+	}
 	
 	table .boton{
 		height:30px;
-		margin-top: 15px;
+		margin-top: 20px;
 		font-size:18px;
 		color: #00CAFF;
+		position:absolute;
+		right:6%;		
 	}
-		
+	
 {% endblock %}
 {% block contenido %}
 	<div id='info'>
@@ -48,26 +57,34 @@
 					<label width = 200px for="start">Start:</label>
 				</th>
 				<td>
-					<input id="start" type="text" name="start"/>
+					<input id="start" type="number" min='0' max='{{end}}' value='0' name="start"/>
 				</td>
 				<th>
-					<label width = 200px for="end">end:</label>
+					<label width = 200px for="end">End:</label>
 				</th>
 				<td>
-					<input id="end" type="text" name="end"/>
+					<input id="end" type="number" min='0'  max='{{end}}'  value='{{end}}' name="end"/>
+				</td>
+				<th>
+					<label width = 200px for="size">Size:</label>
+				</th>
+				<td id="size">
+					<input  type="number" min='0' value='1' name="size"/>
+					<select name='unit' >
+						<option value='kb'>KB</option>
+						<option value='mb' selected='selected'>MB</option>
+					<select>
 				</td>
 			</tr>
 			<tr>
-				<td></td>
-				<td></td>
-				<td></td>
 				<td>
-					<input type="submit" name="descargar" value="Download"  class="boton" /> 
+					<input colspan="6" type="submit" name="descargar" value="Download"  class="boton" /> 
 				</td>
 			</tr>
 		</table>
 		<input id="dwx" type="hidden" name="dwx" value={{dwx}}>
 		<input id="mail" type="hidden" name="mail" value={{mail}}>
+		<input id="thread" type="hidden" name="thread" value={{thread}}>
 	</form>	
 {% endblock %}
 {% block message %}

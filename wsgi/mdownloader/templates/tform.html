@@ -3,25 +3,34 @@
 {% block style %}
 	table{
 		width:100%;
-		/*text-align:right;*/
+		text-align:left;
 	}
 	
-	table #mail, table #dwx{
-		width:90%;
+	#mail, #dwx{
+		width:96%;
 		height:30px;
 		margin-top: 15px;
 		padding-left: 5px;
 		color: #00CAFF;
 		font-size:16px;
-		backgroud:red;
+	}
+	
+	#thread, #youtube{
+		height:30px;
+		margin-top: 15px;
+		color: #00CAFF;
+		font-size:16px;
 	}
 	
 	table .boton{
 		height:30px;
-		margin-top: 15px;
+		margin-top: 20px;
 		font-size:18px;
 		color: #00CAFF;
-	}	
+		position:absolute;
+		right:6%;		
+	}
+
 {% endblock %}
 {% block contenido %}
 	<form id="descargar" action="/data/" method="post">
@@ -40,8 +49,25 @@
 					<label for="mail">Mail:</label>
 				</th>
 				<td>
-					<input id="mail" type="text" value="{{mail}}" name="mail"/>
+					<input id="mail" type="email" value="{{mail}}" name="mail"/>
 				</td>
+			</tr>
+			<tr>
+				<th>
+					<label for="thread">Multi-Thread:</label>
+				</th>
+				<td>
+					<input id="thread" type="checkbox" checked name="thread"/>
+				</td>
+			</tr>
+			<tr>
+				<th>
+					<label width = 200px for="youtube">Youtube:</label>
+				</th>
+				<td>
+					<input id="youtube" type="checkbox" name="youtube"/>
+				<td>
+				
 			</tr>
 			<tr>
 				<td></td>
