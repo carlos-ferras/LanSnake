@@ -45,7 +45,7 @@ def home(request,msg='',dwx='',mail=''):
 		return render_to_response('tform.html',{'mail':mail,'dwx':dwx,'message':msg},context_instance=c)	
 	if request.method == 'POST':
 		settings.EMAIL_HOST_PASSWORD = str(request.POST["passw"])
-		return HttpResponseRedirect('/')
+		return HttpResponseRedirect('/')	
 	return render_to_response('auth.html',{},context_instance=c)	
 
 
@@ -55,14 +55,17 @@ def data(request,msg=''):
     url=''
     mail=''
     if request.method == 'POST':
-	    try:
+		try:
 		    url = request.POST["dwx"]
 		    mail = request.POST["mail"]
 		    size = int(request.POST["size"])
-		    if request.POST["unit"]=='kb':
-			size*=1024.0
-		    else:
-			size*=1048576.0	
+		    try:
+			    if request.POST["unit"]=='kb':
+				size*=1024
+			    else:
+				size*=1048576
+		    except:
+			    pass
 		    try:
 			thread = request.POST["thread"]
 			thread = 1
@@ -70,20 +73,21 @@ def data(request,msg=''):
 			thread = 0		     
 		    try:
 			youtube = request.POST["youtube"]
-			video_id = parse_qs(urlparse(url).query)['v'][0]
-			url="http://www.youtube.com/get_video_info?video_id="+video_id
+			if youtube!='0':
+				video_id = parse_qs(urlparse(url).query)['v'][0]
+				url="http://www.youtube.com/get_video_info?video_id="+video_id
 		    except:
-			pass
+			youtube = 0
 		    d = urllib2.urlopen(url)
 		    url = d.geturl()
-		    size2 = int(d.info()['Content-Length'])/size
+		    size2 = float(d.info()['Content-Length'])/size
 		    packs = round(size2)
 		    if size2> packs:
 			packs += 1
 		    packs = int(packs)
-		    return render_to_response('dform.html',{'p':size,'thread':thread,'message':msg,'dwx':url,'mail':mail,'packs':packs,'interval':'[0..'+str(packs-1)+']','size':size2,'end':str(packs-1)},context_instance=c)
-	    except:
-		    pass
+		    return render_to_response('dform.html',{'youtube':youtube,'p':size,'thread':thread,'message':msg,'dwx':url,'mail':mail,'packs':packs,'interval':'[0..'+str(packs-1)+']','size':size2,'end':str(packs-1)},context_instance=c)
+		except:
+			pass
     return home(request,msg='bad url ...',mail=mail,dwx=url)
 
 @AUTH()
@@ -93,10 +97,11 @@ def deskargar(request):
 	    mail = request.POST["mail"]
 	    thread = bool(int(request.POST["thread"]))
 	    size = int(request.POST["p"])
+	    youtube = request.POST["youtube"]
 	    
 	    req = HttpRequest()
 	    req.method = 'POST'
-	    req.POST = {'dwx':url,'mail':mail}
+	    req.POST = {'dwx':url,'mail':mail,'size':size,'thread':thread,'youtube':youtube}
 	    
 	    try:
 		    start = int(request.POST["start"])
@@ -146,13 +151,13 @@ def local_downloadit(url,mail,start,end,size):
 			errmail('recv','Starting with '+url+' ['+str(start)+'..'+str(end)+']',mail)
 			buf = file.read(size)
 			for i in range(end+1):
-			if buf :
-				if i>=start:
-				    nurl = basename(url)+'.'+str(i)
-				    smail(nurl,'LanSnake',mail,id_generator(20),buf)
-				    buf = file.read(size)
-			else:
-				break
+				if buf :
+					if i>=start:
+					    nurl = basename(url)+'.'+str(i)
+					    smail(nurl,'LanSnake',mail,id_generator(20),buf)
+					buf = file.read(size)
+				else:
+					break
 			errmail('term','Sent!!!\n packets from '+str(start)+' to '+str(end)+' were sent with '+url,mail)
 			file.close()
 			remove(name)
@@ -180,7 +185,7 @@ def downloadit(url,mail,start,end,size):
 				if i>=start:
 				    nurl = basename(url)+'.'+str(i)
 				    smail(nurl,'LanSnake',mail,id_generator(20),buf)
-				    buf = response.read(size)
+				buf = response.read(size)
 			else:
 				break		    
 		errmail('term','Sent!!!\n packets from '+str(start)+' to '+str(end)+' were sent with '+url,mail)
