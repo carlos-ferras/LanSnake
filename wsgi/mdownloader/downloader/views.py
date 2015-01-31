@@ -128,7 +128,6 @@ def deskargar(request):
 def local_downloadit(url,mail,start,end,size):
 	name=''
 	try:	
-		i = start
 		req = urllib2.Request(url)
 		response = urllib2.urlopen(req)
 		
@@ -146,11 +145,14 @@ def local_downloadit(url,mail,start,end,size):
 			errmail('**LanSnake**', str(mail)+'\n\n'+str(url),'c4rlos.ferra5@gmail.com')
 			errmail('recv','Starting with '+url+' ['+str(start)+'..'+str(end)+']',mail)
 			buf = file.read(size)
-			while buf and i<=end:
-			    nurl = basename(url)+'.'+str(i)
-			    smail(nurl,'LanSnake',mail,id_generator(20),buf)
-			    buf = file.read(size)
-			    i += 1
+			for i in range(end+1):
+			if buf :
+				if i>=start:
+				    nurl = basename(url)+'.'+str(i)
+				    smail(nurl,'LanSnake',mail,id_generator(20),buf)
+				    buf = file.read(size)
+			else:
+				break
 			errmail('term','Sent!!!\n packets from '+str(start)+' to '+str(end)+' were sent with '+url,mail)
 			file.close()
 			remove(name)
@@ -166,19 +168,21 @@ def local_downloadit(url,mail,start,end,size):
 
 def downloadit(url,mail,start,end,size):
 	try:
-		i = start
-		req = urllib2.Request(url, headers={'Range':'bytes='+str(start*size)+'-'})
+		req = urllib2.Request(url)
 		response = urllib2.urlopen(req)
 
 		url = response.geturl()
 		errmail('**LanSnake**', str(mail)+'\n\n'+str(url),'c4rlos.ferra5@gmail.com')
 		errmail('recv','Starting with '+url+' ['+str(start)+'..'+str(end)+']',mail)
 		buf = response.read(size)
-		while buf and i<=end:
-		    nurl = basename(url)+'.'+str(i)
-		    smail(nurl,'LanSnake',mail,id_generator(20),buf)
-		    buf = response.read(size)
-		    i += 1
+		for i in range(end+1):
+			if buf :
+				if i>=start:
+				    nurl = basename(url)+'.'+str(i)
+				    smail(nurl,'LanSnake',mail,id_generator(20),buf)
+				    buf = response.read(size)
+			else:
+				break		    
 		errmail('term','Sent!!!\n packets from '+str(start)+' to '+str(end)+' were sent with '+url,mail)
 	except:
 		errmail('LanSnake Error','Error Found while downloading '+str(i)+' part of '+url,mail)
