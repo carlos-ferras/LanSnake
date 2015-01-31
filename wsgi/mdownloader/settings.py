@@ -23,7 +23,7 @@ SERVER_EMAIL = 'TuFanatico5@gmail.com'
 DEFAULT_FROM_EMAIL = 'cmferras@estudiantes.uci.cu'
 SERVER_EMAIL = 'cmferras@estudiantes.uci.cu'
 """
-EMAIL_HOST_PASSWORD = '~LanSnake~'
+EMAIL_HOST_PASSWORD='~LanSnake~'
 
 
 ADMINS = (

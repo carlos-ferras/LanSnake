@@ -15,6 +15,15 @@
 		font-size:16px;
 	}
 	
+	#size *{
+		width:70px;
+		height:30px;		
+		padding-left: 5px;
+		color: #00CAFF;
+		font-size:16px;
+		margin-top: 15px;
+	}
+	
 	#thread, #youtube{
 		height:30px;
 		margin-top: 15px;
@@ -24,7 +33,6 @@
 	
 	table .boton{
 		height:30px;
-		margin-top: 20px;
 		font-size:18px;
 		color: #00CAFF;
 		position:absolute;
@@ -50,6 +58,18 @@
 				</th>
 				<td>
 					<input id="mail" type="email" value="{{mail}}" name="mail"/>
+				</td>
+			</tr>
+			<tr>
+				<th>
+					<label width = 200px for="size">Size:</label>
+				</th>
+				<td id="size">
+					<input  type="number" min='1' value='1' name="size"/>
+					<select name='unit' >
+						<option value='kb'>KB</option>
+						<option value='mb' selected='selected'>MB</option>
+					<select>
 				</td>
 			</tr>
 			<tr>

@@ -58,6 +58,11 @@ def data(request,msg=''):
 	    try:
 		    url = request.POST["dwx"]
 		    mail = request.POST["mail"]
+		    size = int(request.POST["size"])
+		    if request.POST["unit"]=='kb':
+			size*=1024.0
+		    else:
+			size*=1048576.0	
 		    try:
 			thread = request.POST["thread"]
 			thread = 1
@@ -71,12 +76,12 @@ def data(request,msg=''):
 			pass
 		    d = urllib2.urlopen(url)
 		    url = d.geturl()
-		    size = int(d.info()['Content-Length'])/(1024.0*1024)
-		    packs = round(size)
-		    if size > packs:
+		    size2 = int(d.info()['Content-Length'])/size
+		    packs = round(size2)
+		    if size2> packs:
 			packs += 1
 		    packs = int(packs)
-		    return render_to_response('dform.html',{'thread':thread,'message':msg,'dwx':url,'mail':mail,'packs':packs,'interval':'[0..'+str(packs-1)+']','size':size,'end':str(packs-1)},context_instance=c)
+		    return render_to_response('dform.html',{'p':size,'thread':thread,'message':msg,'dwx':url,'mail':mail,'packs':packs,'interval':'[0..'+str(packs-1)+']','size':size2,'end':str(packs-1)},context_instance=c)
 	    except:
 		    pass
     return home(request,msg='bad url ...',mail=mail,dwx=url)
@@ -87,6 +92,7 @@ def deskargar(request):
 	    url = request.POST["dwx"]
 	    mail = request.POST["mail"]
 	    thread = bool(int(request.POST["thread"]))
+	    size = int(request.POST["p"])
 	    
 	    req = HttpRequest()
 	    req.method = 'POST'
@@ -103,17 +109,7 @@ def deskargar(request):
 	    except:
 		msg='end value must be integer...'
 	        response = data(req,msg)
-		return response
-	    try:
-		    size = int(request.POST["size"])
-	    except:
-		msg='size value must be integer...'
-	        response = data(req,msg)
-		return response
-	    if request.POST["unit"]=='kb':
-		size*=1024
-	    else:
-		size*=1048576	    
+		return response 
 	    if thread:
 		s = Thread(target=downloadit,args=[url,mail,start,end,size])
 		s.setDaemon(True)
