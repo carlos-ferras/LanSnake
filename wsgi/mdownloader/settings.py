@@ -8,21 +8,12 @@ EMAIL_USE_TLS = True
 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-"""
-EMAIL_HOST='smtp.estudiantes.uci.cu'
-EMAIL_PORT = 25
-"""
 
-EMAIL_HOST_USER = 'TuFanatico5@gmail.com'"""
-EMAIL_HOST_USER='cmferras@estudiantes.uci.cu'
-"""
+EMAIL_HOST_USER = 'TuFanatico5@gmail.com'
 
 DEFAULT_FROM_EMAIL = 'TuFanatico5@gmail.com'
 SERVER_EMAIL = 'TuFanatico5@gmail.com'
-"""
-DEFAULT_FROM_EMAIL = 'cmferras@estudiantes.uci.cu'
-SERVER_EMAIL = 'cmferras@estudiantes.uci.cu'
-"""
+
 EMAIL_HOST_PASSWORD='~LanSnake~'
 
 
