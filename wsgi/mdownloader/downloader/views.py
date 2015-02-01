@@ -15,7 +15,6 @@ import re
 from urlparse import *
 from urllib import *
 
-
 def isInside():
 	try:
 		back=EmailBackend()
@@ -136,9 +135,12 @@ def local_downloadit(url,mail,start,end,size):
 		req = urllib2.Request(url)
 		response = urllib2.urlopen(req)
 		
+		t=int(response.info()['Content-Length'])/1048576
+		settings.BUFER+=t
+		
 		url = response.geturl()
 		
-		if int(response.info()['Content-Length'])/1048576<=800:
+		if settings.BUFER<=800:			
 			data = response.read(int(response.info()['Content-Length']))
 			name='file.'+basename(url).split('.')[-1]
 			
@@ -161,13 +163,15 @@ def local_downloadit(url,mail,start,end,size):
 			errmail('term','Sent!!!\n packets from '+str(start)+' to '+str(end)+' were sent with '+url,mail)
 			file.close()
 			remove(name)
+			settings.BUFER-=t
 			return True
 	except:
-		errmail('LanSnake Error','Error Found while downloading '+str(i)+' part of '+url,mail)
+		errmail('LanSnake Error','Error Found while downloading '+url,mail)
 	try:
 		remove(name)
 	except:
 		pass
+	settings.BUFER-=t
 	return False
 
 
