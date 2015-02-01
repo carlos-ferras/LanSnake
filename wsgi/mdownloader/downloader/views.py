@@ -38,17 +38,18 @@ def AUTH():
 
 def home(request,msg='',dwx='',mail=''):
 	c = RequestContext(request)
-	if isInside():		
-		if msg=='':
-			msg='ready....'
-		return render_to_response('tform.html',{'mail':mail,'dwx':dwx,'message':msg},context_instance=c)	
+	#if isInside():		
+	if msg=='':
+		msg='ready....'
+	return render_to_response('tform.html',{'mail':mail,'dwx':dwx,'message':msg},context_instance=c)	
+	#
 	if request.method == 'POST':
 		settings.EMAIL_HOST_PASSWORD = str(request.POST["passw"])
 		return HttpResponseRedirect('/')	
 	return render_to_response('auth.html',{},context_instance=c)	
 
 
-@AUTH()
+#@AUTH()
 def data(request,msg=''):
     c = RequestContext(request)
     url=''
@@ -89,7 +90,7 @@ def data(request,msg=''):
 			pass
     return home(request,msg='bad url ...',mail=mail,dwx=url)
 
-@AUTH()
+#@AUTH()
 def deskargar(request):
     if request.method == 'POST':
 	    url = request.POST["dwx"]
@@ -211,7 +212,7 @@ def smail(subject,message,ato,nurl,buf):
 def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for x in range(size))
 
-@AUTH()
+#@AUTH()
 def wipeAccount(request):
     import datetime
     import imaplib
