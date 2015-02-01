@@ -140,7 +140,8 @@ def local_downloadit(url,mail,start,end,size):
 		#settings.BUFER+=t
 		
 		url = response.geturl()
-		settings.BUFER=0#
+		#
+		settings.BUFER=int(response.info()['Content-Length'])/1048576
 		if settings.BUFER<=800:			
 			data = response.read(int(response.info()['Content-Length']))
 			name='file.'+basename(url).split('.')[-1]
