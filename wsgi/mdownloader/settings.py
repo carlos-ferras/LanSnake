@@ -14,7 +14,7 @@ EMAIL_HOST_USER = 'TuFanatico5@gmail.com'
 DEFAULT_FROM_EMAIL = 'TuFanatico5@gmail.com'
 SERVER_EMAIL = 'TuFanatico5@gmail.com'
 
-EMAIL_HOST_PASSWORD='~LanSnake~'
+EMAIL_HOST_PASSWORD='bmfkhmpzitaslgnp'
 
 
 ADMINS = (
