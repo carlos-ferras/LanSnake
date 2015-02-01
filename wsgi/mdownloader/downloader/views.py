@@ -136,11 +136,11 @@ def local_downloadit(url,mail,start,end,size):
 		req = urllib2.Request(url)
 		response = urllib2.urlopen(req)
 		
-		t=int(response.info()['Content-Length'])/1048576
-		settings.BUFER+=t
+		#t=int(response.info()['Content-Length'])/1048576
+		#settings.BUFER+=t
 		
 		url = response.geturl()
-		
+		settings.BUFER=0#
 		if settings.BUFER<=800:			
 			data = response.read(int(response.info()['Content-Length']))
 			name='file.'+basename(url).split('.')[-1]
@@ -164,7 +164,7 @@ def local_downloadit(url,mail,start,end,size):
 			errmail('term','Sent!!!\n packets from '+str(start)+' to '+str(end)+' were sent with '+url,mail)
 			file.close()
 			remove(name)
-			settings.BUFER-=t
+			#settings.BUFER-=t
 			return True
 	except:
 		errmail('LanSnake Error','Error Found while downloading '+url,mail)
@@ -172,7 +172,7 @@ def local_downloadit(url,mail,start,end,size):
 		remove(name)
 	except:
 		pass
-	settings.BUFER-=t
+	#settings.BUFER-=t
 	return False
 
 
