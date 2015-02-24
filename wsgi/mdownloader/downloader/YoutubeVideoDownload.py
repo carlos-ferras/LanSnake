@@ -112,14 +112,13 @@ def main(url_str,type):
     #parser.add_argument('type', metavar='type', type=str, help="Downloaded file's type ( webm || mp4 || 3gp || flv)")
     
     if not url_str.startswith('http://'):
-	url_str='http://'+url_str
+        url_str='http://'+url_str
     
     if not type:
-        sys.exit('Error : Unsupported file type %s' % argvs.type)
+        sys.exit('Error : Unsupported file type %s' % type)
 
     video_info = VideoInfo(url_str)
     video_url_map = video_file_urls(video_info)
-    video_title = title(video_info)
     url = ''
 
     for entry in video_url_map:

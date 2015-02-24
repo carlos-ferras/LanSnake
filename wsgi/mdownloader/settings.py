@@ -20,9 +20,7 @@ EMAIL_HOST_USER = 'cmferras@estudiantes.uci.cu'
 DEFAULT_FROM_EMAIL = 'cmferras@estudiantes.uci.cu'
 SERVER_EMAIL = 'cmferras@estudiantes.uci.cu'
 
-#bmfkhmpzitaslgnp
 EMAIL_HOST_PASSWORD='Krlitos555*'
-
 
 ADMINS = (
     ('Carlos Ferras', 'c4rlos.ferra5@gmail.com'),

@@ -57,6 +57,7 @@ def data(request,msg=''):
 	url=''
 	mail=''
 	if request.method == 'POST':
+		try:
 			url = request.POST["dwx"]
 			mail = request.POST["mail"]
 			size = int(request.POST["size"])
@@ -72,9 +73,12 @@ def data(request,msg=''):
 				thread = 1
 			except:
 				thread = 0
-			youtube = request.POST["youtube"]
-			if youtube!='0':
-				url=YoutubeVideoDownload.main(url,'mp4')
+			try:
+				youtube = request.POST["youtube"]
+				if youtube!='0':
+					url=YoutubeVideoDownload.main(url,'mp4')
+			except:
+				youtube = 0
 			d = urllib2.urlopen(url)
 			url = d.geturl()
 			size2 = float(d.info()['Content-Length'])/size
@@ -83,7 +87,9 @@ def data(request,msg=''):
 				packs += 1
 			packs = int(packs)
 			return render_to_response('dform.html',{'youtube':youtube,'p':size,'thread':thread,'message':msg,'dwx':url,'mail':mail,'packs':packs,'interval':'[0..'+str(packs-1)+']','size':size2,'end':str(packs-1)},context_instance=c)
-
+		except:
+			pass
+	return home(request,msg='bad url ...',mail=mail,dwx=url)
 
 #@AUTH()
 def deskargar(request):
