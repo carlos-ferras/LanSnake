@@ -14,6 +14,8 @@ from django.core.mail.backends.smtp import  EmailBackend
 import re
 from urlparse import *
 from urllib import *
+import YoutubeVideoDownload
+
 
 def isInside():
 	try:
@@ -74,8 +76,7 @@ def data(request,msg=''):
 		    try:
 			youtube = request.POST["youtube"]
 			if youtube!='0':
-				video_id = parse_qs(urlparse(url).query)['v'][0]
-				url="http://www.youtube.com/get_video_info?video_id="+video_id
+				url=YoutubeVideoDownload.main(url,'mp4')
 		    except:
 			youtube = 0
 		    d = urllib2.urlopen(url)
