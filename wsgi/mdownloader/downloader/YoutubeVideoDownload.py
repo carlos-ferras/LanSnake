@@ -112,7 +112,7 @@ def main(url_str,type):
     #parser.add_argument('type', metavar='type', type=str, help="Downloaded file's type ( webm || mp4 || 3gp || flv)")
     
     if not url.startswith('http://'):
-	url='http://'+url    
+	url_str='http://'+url
     
     if not type:
         sys.exit('Error : Unsupported file type %s' % argvs.type)
