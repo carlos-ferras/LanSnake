@@ -5,7 +5,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 EMAIL_USE_TLS = True
-"""
+
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 """
@@ -19,8 +19,9 @@ SERVER_EMAIL = 'TuFanatico5@gmail.com'
 EMAIL_HOST_USER = 'cmferras@estudiantes.uci.cu'
 DEFAULT_FROM_EMAIL = 'cmferras@estudiantes.uci.cu'
 SERVER_EMAIL = 'cmferras@estudiantes.uci.cu'
+"""
 
-EMAIL_HOST_PASSWORD='Krlitos555*'
+EMAIL_HOST_PASSWORD='bmfkhmpzitaslgnp'
 
 ADMINS = (
     ('Carlos Ferras', 'c4rlos.ferra5@gmail.com'),
