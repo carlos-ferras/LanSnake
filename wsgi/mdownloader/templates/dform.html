@@ -44,7 +44,7 @@
 {% endblock %}
 {% block contenido %}
 	<div id='info'>
-		<p><b>URL:</b> <a href="{{dwx}}">{{dwx}}</a></p>
+		<p><b>URL:</b> <a title="{{dwx}}" href="{{dwx}}">{{dwx|truncatechars:70}}</a></p>
 		<p><b>Mail:</b> {{mail}}</p>
 		<p><b>Size:</b> {{size}} Mb</p>
 		<p><b>Packs:</b> {{packs}} ::  {{interval}}</p>
