@@ -53,43 +53,43 @@ def home(request,msg='',dwx='',mail=''):
 
 #@AUTH()
 def data(request,msg=''):
-    c = RequestContext(request)
-    url=''
-    mail=''
-    if request.method == 'POST':
+	c = RequestContext(request)
+	url=''
+	mail=''
+	if request.method == 'POST':
 		try:
-		    url = request.POST["dwx"]
-		    mail = request.POST["mail"]
-		    size = int(request.POST["size"])
-		    try:
-			    if request.POST["unit"]=='kb':
-				size*=1024
-			    else:
-				size*=1048576
-		    except:
-			    pass
-		    try:
-			thread = request.POST["thread"]
-			thread = 1
-		    except:
-			thread = 0		     
-		    try:
-			youtube = request.POST["youtube"]
-			if youtube!='0':
-				url=YoutubeVideoDownload.main(url,'mp4')
-		    except:
-			youtube = 0
-		    d = urllib2.urlopen(url)
-		    url = d.geturl()
-		    size2 = float(d.info()['Content-Length'])/size
-		    packs = round(size2)
-		    if size2> packs:
-			packs += 1
-		    packs = int(packs)
-		    return render_to_response('dform.html',{'youtube':youtube,'p':size,'thread':thread,'message':msg,'dwx':url,'mail':mail,'packs':packs,'interval':'[0..'+str(packs-1)+']','size':size2,'end':str(packs-1)},context_instance=c)
+			url = request.POST["dwx"]
+			mail = request.POST["mail"]
+			size = int(request.POST["size"])
+			try:
+				if request.POST["unit"]=='kb':
+					size*=1024
+				else:
+					size*=1048576
+			except:
+				pass
+			try:
+				thread = request.POST["thread"]
+				thread = 1
+			except:
+				thread = 0
+			try:
+				youtube = request.POST["youtube"]
+				if youtube!='0':
+					url=YoutubeVideoDownload.main(url,'mp4')
+			except:
+				youtube = 0
+			d = urllib2.urlopen(url)
+			url = d.geturl()
+			size2 = float(d.info()['Content-Length'])/size
+			packs = round(size2)
+			if size2> packs:
+				packs += 1
+			packs = int(packs)
+			return render_to_response('dform.html',{'youtube':youtube,'p':size,'thread':thread,'message':msg,'dwx':url,'mail':mail,'packs':packs,'interval':'[0..'+str(packs-1)+']','size':size2,'end':str(packs-1)},context_instance=c)
 		except:
 			pass
-    return home(request,msg='bad url ...',mail=mail,dwx=url)
+	return home(request,msg='bad url ...',mail=mail,dwx=url)
 
 #@AUTH()
 def deskargar(request):

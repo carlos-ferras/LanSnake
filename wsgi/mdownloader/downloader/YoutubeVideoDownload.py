@@ -111,8 +111,8 @@ def main(url_str,type):
     #parser.add_argument('url', metavar='url', type=str, help='Youtube video URL string with "http://" prefixed')
     #parser.add_argument('type', metavar='type', type=str, help="Downloaded file's type ( webm || mp4 || 3gp || flv)")
     
-    if not url.startswith('http://'):
-	url_str='http://'+url
+    if not url_str.startswith('http://'):
+	url_str='http://'+url_str
     
     if not type:
         sys.exit('Error : Unsupported file type %s' % argvs.type)
