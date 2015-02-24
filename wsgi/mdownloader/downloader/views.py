@@ -135,10 +135,10 @@ def local_downloadit(url,mail,start,end,size):
 	try:	
 		req = urllib2.Request(url)
 		response = urllib2.urlopen(req)
-		
+
 		#t=int(response.info()['Content-Length'])/1048576
 		#settings.BUFER+=t
-		
+
 		url = response.geturl()
 		#
 		settings.BUFER=int(response.info()['Content-Length'])/1048576
@@ -196,7 +196,7 @@ def downloadit(url,mail,start,end,size):
 				break		    
 		errmail('term','Sent!!!\n packets from '+str(start)+' to '+str(end)+' were sent with '+url,mail)
 	except:
-		errmail('LanSnake Error','Error Found while downloading '+str(i)+' part of '+url,mail)
+		errmail('LanSnake Error','Error Found while downloading '+url,mail)
 
 
 def errmail(subject,message,ato):
