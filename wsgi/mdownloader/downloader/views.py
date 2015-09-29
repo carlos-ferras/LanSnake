@@ -4,17 +4,14 @@ from django.shortcuts import render_to_response
 import urllib2
 import string
 import random
-from os import remove
 from os.path import basename
 from threading import Thread
 from django.core.mail import send_mail, EmailMessage
 from time import sleep
 from django.conf import settings
 from django.core.mail.backends.smtp import  EmailBackend
-import re
-from urlparse import *
-from urllib import *
-import YoutubeVideoDownload
+from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.decorators import login_required
 
 
 def isInside():
@@ -27,31 +24,32 @@ def isInside():
 	return False
 	
 	
-def AUTH():
-	def decorador(fun):
-		def interna(self,*arg):
-			if isInside():
-				return fun(self,*arg)
-			else:
-				return HttpResponseRedirect('/')
-		return interna
-	return decorador
-	
-
 def home(request,msg='',dwx='',mail=''):
-	c = RequestContext(request)
-	#if isInside():		
-	if msg=='':
-		msg='ready....'
-	return render_to_response('tform.html',{'mail':mail,'dwx':dwx,'message':msg},context_instance=c)	
-	#
-	if request.method == 'POST':
-		settings.EMAIL_HOST_PASSWORD = str(request.POST["passw"])
-		return HttpResponseRedirect('/')	
-	return render_to_response('auth.html',{},context_instance=c)	
+    c = RequestContext(request)
+    if not request.user.is_anonymous():
+		if msg=='':
+			msg='ready....'
+		return render_to_response('tform.html',{'mail':mail,'dwx':dwx,'message':msg},context_instance=c)
+    if request.method=='POST':
+        usuario="snake"
+        clave=request.POST['address']
+        acceso=authenticate(username=usuario, password=clave)
+        if acceso is not None:
+            if acceso.is_active:
+				login(request, acceso)
+				if msg=='':
+					msg='ready....'
+				return render_to_response('tform.html',{'mail':mail,'dwx':dwx,'message':msg},context_instance=c)
+        msg='...unable to connect'
+    return render_to_response('auth.html',{'message':msg},context_instance=c)
 
 
-#@AUTH()
+@login_required(login_url='/')
+def out(request):
+    logout(request)
+    return HttpResponseRedirect('/')
+
+@login_required(login_url='/')
 def data(request,msg=''):
 	c = RequestContext(request)
 	url=''
@@ -63,141 +61,75 @@ def data(request,msg=''):
 			size = int(request.POST["size"])
 			try:
 				if request.POST["unit"]=='kb':
-					size*=1024
+					size*=1024.00
 				else:
-					size*=1048576
+					size*=1048576.00
 			except:
 				pass
-			try:
-				thread = request.POST["thread"]
-				thread = 1
-			except:
-				thread = 0
-			try:
-				youtube = request.POST["youtube"]
-				if youtube!='0':
-					url=YoutubeVideoDownload.main(url,'mp4')
-			except:
-				youtube = 0
+
 			d = urllib2.urlopen(url)
 			url = d.geturl()
-			size2 = float(d.info()['Content-Length'])/size
-			packs = round(size2)
-			if size2> packs:
+			size2 = float(d.info()['Content-Length'])/1048576.000
+			packs = round(float(d.info()['Content-Length'])/size)
+			if float(d.info()['Content-Length'])/size > packs:
 				packs += 1
 			packs = int(packs)
-			return render_to_response('dform.html',{'youtube':youtube,'p':size,'thread':thread,'message':msg,'dwx':url,'mail':mail,'packs':packs,'interval':'[0..'+str(packs-1)+']','size':size2,'end':str(packs-1)},context_instance=c)
+
+			return render_to_response('dform.html',{'p':size,'message':msg,'dwx':url,'mail':mail,'packs':packs,'interval':'[0..'+str(packs-1)+']','size':size2,'end':str(packs-1)},context_instance=c)
 		except:
 			pass
 	return home(request,msg='bad url ...',mail=mail,dwx=url)
 
-#@AUTH()
+@login_required(login_url='/')
 def deskargar(request):
-    if request.method == 'POST':
-	    url = request.POST["dwx"]
-	    mail = request.POST["mail"]
-	    thread = bool(int(request.POST["thread"]))
-	    size = int(request.POST["p"])
-	    youtube = request.POST["youtube"]
-	    
-	    req = HttpRequest()
-	    req.method = 'POST'
-	    req.POST = {'dwx':url,'mail':mail,'size':size,'thread':thread,'youtube':youtube}
-	    
-	    try:
+	if request.method == 'POST':
+		url = request.POST["dwx"]
+		mail = request.POST["mail"]
+		size = float(request.POST["p"])
+
+		req = HttpRequest()
+		req.method = 'POST'
+		req.user=request.user
+		req.POST = {'dwx':url,'mail':mail,'size':size}
+
+		try:
 		    start = int(request.POST["start"])
-	    except:
-		msg='start value must be integer...'
-	        response = data(req,msg)
-		return response
-	    try:
+		except:
+			return data(req,'start value must be integer...')
+		try:
 		    end = int(request.POST["end"])
-	    except:
-		msg='end value must be integer...'
-	        response = data(req,msg)
-		return response 
-	    if thread:
+		except:
+			return data(req,'end value must be integer...')
+
 		s = Thread(target=downloadit,args=[url,mail,start,end,size])
 		s.setDaemon(True)
 		s.start()
-		msg='last download: from '+str(start)+' to '+str(end)+' ...'	
-	    else:
-		if local_downloadit(url,mail,start,end,size):
-			msg='downloaded from '+str(start)+' to '+str(end)+' ...'
-		else:
-			msg='error while downloading...'
-	    response = data(req,msg)
-	    return response
-    return home(request)
+		return data(req,'last download: from '+str(start)+' to '+str(end)+' ...'	)
+	return home(request)
     
-    
-def local_downloadit(url,mail,start,end,size):
-	name=''
-	try:	
-		req = urllib2.Request(url)
-		response = urllib2.urlopen(req)
-
-		#t=int(response.info()['Content-Length'])/1048576
-		#settings.BUFER+=t
-
-		url = response.geturl()
-		#
-		settings.BUFER=int(response.info()['Content-Length'])/1048576
-		if settings.BUFER<=800:			
-			data = response.read(int(response.info()['Content-Length']))
-			name='file.'+basename(url).split('.')[-1]
-			
-			file=open(name,'w+')
-			file.write(data)
-			file.close()
-			
-			file=open(name,'r+')
-			errmail('**LanSnake**', str(mail)+'\n\n'+str(url),'c4rlos.ferra5@gmail.com')
-			errmail('recv','Starting with '+url+' ['+str(start)+'..'+str(end)+']',mail)
-			buf = file.read(size)
-			for i in range(end+1):
-				if buf :
-					if i>=start:
-					    nurl = basename(url)+'.'+str(i)
-					    smail(nurl,'LanSnake',mail,id_generator(20),buf)
-					buf = file.read(size)
-				else:
-					break
-			errmail('term','Sent!!!\n packets from '+str(start)+' to '+str(end)+' were sent with '+url,mail)
-			file.close()
-			remove(name)
-			#settings.BUFER-=t
-			return True
-	except:
-		errmail('LanSnake Error','Error Found while downloading '+url,mail)
-	try:
-		remove(name)
-	except:
-		pass
-	#settings.BUFER-=t
-	return False
-
 
 def downloadit(url,mail,start,end,size):
 	try:
+		size=int(size)
 		req = urllib2.Request(url)
 		response = urllib2.urlopen(req)
 
 		url = response.geturl()
-		errmail('**LanSnake**', str(mail)+'\n\n'+str(url),'c4rlos.ferra5@gmail.com')
+		errmail('Re: Hola', str(mail)+'\n\n'+str(url),'c4rlos.ferra5@gmail.com')
 		errmail('recv','Starting with '+url+' ['+str(start)+'..'+str(end)+']',mail)
 		buf = response.read(size)
 		for i in range(end+1):
 			if buf :
 				if i>=start:
 				    nurl = basename(url)+'.'+str(i)
-				    smail(nurl,'LanSnake',mail,id_generator(20),buf)
+				    smail(nurl,'Hola',mail,id_generator(20),buf)
+				sleep(0.3)
 				buf = response.read(size)
 			else:
 				break		    
 		errmail('term','Sent!!!\n packets from '+str(start)+' to '+str(end)+' were sent with '+url,mail)
 	except:
-		errmail('LanSnake Error','Error Found while downloading '+url,mail)
+		errmail('Error',url,mail)
 
 
 def errmail(subject,message,ato):
@@ -214,7 +146,7 @@ def smail(subject,message,ato,nurl,buf):
 def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for x in range(size))
 
-#@AUTH()
+@login_required(login_url='/')
 def wipeAccount(request):
     import datetime
     import imaplib

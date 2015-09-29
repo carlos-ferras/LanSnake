@@ -11,7 +11,7 @@
 		height:30px;
 		margin-top: 15px;
 		padding-left: 5px;
-		color: #00CAFF;
+		color: #0689fb;
 		font-size:16px;
 	}
 	
@@ -19,7 +19,7 @@
 		width:70px;
 		height:30px;		
 		padding-left: 5px;
-		color: #00CAFF;
+		color: #0689fb;
 		font-size:16px;
 		margin-top: 15px;
 	}
@@ -27,14 +27,14 @@
 	#thread, #youtube{
 		height:30px;
 		margin-top: 15px;
-		color: #00CAFF;
+		color: #0689fb;
 		font-size:16px;
 	}
 	
 	table .boton{
 		height:30px;
 		font-size:18px;
-		color: #00CAFF;
+		color: #0689fb;
 		position:absolute;
 		right:6%;
 		bottom:5%;
@@ -42,7 +42,7 @@
 
 {% endblock %}
 {% block contenido %}
-	<form id="descargar" action="/data/" method="post">
+	<form id="descargar" action="/account/asd34y91lk0/data/" method="post">
 		{% csrf_token %}
 		<table>
 			<tr>
@@ -50,7 +50,7 @@
 					<label width = 200px for="dwx">Download:</label>
 				</th>
 				<td>
-					<input id="dwx" type="text" value="{{dwx}}" name="dwx"/>
+					<input placeholder="download url" id="dwx" type="text" value="{{dwx}}" name="dwx"/>
 				</td>
 			</tr>
 			<tr>
@@ -58,7 +58,7 @@
 					<label for="mail">Mail:</label>
 				</th>
 				<td>
-					<input id="mail" type="email" value="{{mail}}" name="mail"/>
+					<input placeholder="mail to send the download" id="mail" type="email" value="{{mail}}" name="mail"/>
 				</td>
 			</tr>
 			<tr>
@@ -72,23 +72,6 @@
 						<option value='mb' selected='selected'>MB</option>
 					<select>
 				</td>
-			</tr>
-			<tr>
-				<th>
-					<label for="thread">Multi-Thread:</label>
-				</th>
-				<td>
-					<input id="thread" type="checkbox" checked name="thread"/>
-				</td>
-			</tr>
-			<tr>
-				<th>
-					<label width = 200px for="youtube">Youtube:</label>
-				</th>
-				<td>
-					<input id="youtube" type="checkbox" name="youtube"/>
-				<td>
-
 			</tr>
 			<tr>
 				<td></td>

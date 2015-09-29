@@ -1,20 +1,22 @@
+{% load staticfiles %}
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 
 	<head>
 		<title>LanSnake</title>
+        <link rel="shorcut icon" href="{% static 'shortcut.png' %}" />
 		<meta http-equiv="content-type" content="text/html;charset=utf-8" />
-		<meta name="generator" content="Geany 1.22" />
 		<style type="text/css">
 			body {
 				@include diagonalStripes(#aaa, 50px);
 				height: 1000px;
 				background-image: repeating-linear-gradient(45deg, #DEDEDE 0px, #DEDEDE 25px, transparent 25px, transparent 50px, #DEDEDE 50px);
 			}
-			
+
 			#content{
 				position:absolute;
-				background:#80E5FF;
+				background: rgba(6, 140, 255, 0.30);
 				left:20%;
 				top:15%;
 				width:60%;
@@ -22,24 +24,21 @@
 				text-align:center;
 			}
 			
-			#content h1{
-				position:absolute;
-				width:100%;
-				font-size:40px;
-				top:-3%;
-				color:#4D4D4D;
-			}
+			#banner{
+                height: 120px;
+                margin-top: 10px;
+            }
 			
 			#form{
 				width:90%;
 				height:75%;
-				margin-top:13%;
+				margin-top:3%;
 				margin-left:5%;
 			}
 			
 			#message{
 				position:absolute;
-				background:#00CAFF;
+				background: rgba(6, 137, 251, 0.79);
 				left:20%;
 				bottom:20%;
 				width:60%;
@@ -63,34 +62,52 @@
 				padding-right: 15px;
 			}
 
+            #menu a{
+                color:white;
+                text-decoration: none;
+            }
+
+            label{
+                color: #343434;
+            }
+
 			{% block style %}{% endblock %}
 		</style>
 	</head>
 
 	<body>
 		<div id='content'>
-			<h1>LanSnake</h1>
+        	<img id="banner" src="{% static 'banner.png' %}" alt=""/>
+
 			<div id='form'>
 				{% block contenido %}{% endblock %}
 			</div>
 		</div>
-		<div id='message'>
+
+
+        <div id='message'>
 			<p>
 				{% block message %}{% endblock %}
 			</p>
-			<div id='menu'>
+
+            <div id='menu'>
 				<table>
 					<tr>
 						<td>
 							<a href='/'>Home</a>
 						</td>
 						<td>
-							<a href='/wipe'>Wipe Account</a>
+							<a href='/account/asd34y91lk0/wipe/'>Wipe Account</a>
+						</td>
+                        <td>
+							<a href='/close/'>Close</a>
 						</td>
 					</tr>
 				</table>
 			<div>
 		</div>
+
+
 	</body>
 
 </html>

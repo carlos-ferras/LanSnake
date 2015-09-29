@@ -18,7 +18,7 @@
 		width:90%;
 		height:30px;		
 		padding-left: 5px;
-		color: #00CAFF;
+		color: #0689fb;
 		font-size:16px;
 		margin-top: 15px;
 	}
@@ -27,18 +27,17 @@
 		width:45%;
 		height:30px;		
 		padding-left: 5px;
-		color: #00CAFF;
+		color: #0689fb;
 		font-size:16px;
 		margin-top: 15px;
 	}
 	
-	table .boton{
+	table input[type=submit]{
 		height:30px;
 		margin-top: 20px;
 		font-size:18px;
-		color: #00CAFF;
-		position:absolute;
-		right:6%;		
+		color: #0689fb;
+    	cursor: hand;
 	}
 	
 {% endblock %}
@@ -49,34 +48,30 @@
 		<p><b>Size:</b> {{size}} Mb</p>
 		<p><b>Packs:</b> {{packs}} ::  {{interval}}</p>
 	</div>
-	<form id="descargar" action="/deskargar/" method="post">
+	<form id="descargar" action="/account/asd34y91lk0/profile/" method="post">
 		{% csrf_token %}
 		<table>
 			<tr>
 				<th>
-					<label width = 200px for="start">Start:</label>
+					<label for="start">Start:</label>
 				</th>
 				<td>
 					<input id="start" type="number" min='0' max='{{end}}' value='0' name="start"/>
 				</td>
 				<th>
-					<label width = 200px for="end">End:</label>
+					<label for="end">End:</label>
 				</th>
 				<td>
 					<input id="end" type="number" min='0'  max='{{end}}'  value='{{end}}' name="end"/>
-				</td>				
-			</tr>
-			<tr>
-				<td>
-					<input colspan="4" type="submit" name="descargar" value="Download"  class="boton" /> 
+				</td>
+                <td>
+					<input colspan="4" type="submit" name="descargar" value="Download ⇓" />
 				</td>
 			</tr>
 		</table>
 		<input id="dwx" type="hidden" name="dwx" value={{dwx}}>
 		<input id="mail" type="hidden" name="mail" value={{mail}}>
-		<input id="thread" type="hidden" name="thread" value={{thread}}>
 		<input id="p" type="hidden" name="p" value={{p}}>
-		<input id="youtube" type="hidden" name="youtube" value={{youtube}}>
 	</form>	
 {% endblock %}
 {% block message %}

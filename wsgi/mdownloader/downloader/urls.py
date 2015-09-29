@@ -2,7 +2,8 @@ from django.conf.urls import patterns, include, url
 
 urlpatterns = patterns('downloader.views',
     url(r'^$','home'),
-    url(r'^data/?','data'),
-    url(r'^deskargar/?','deskargar'),
-    url(r'^wipe/?','wipeAccount'),
+    url(r'^close/$','out'),
+    url(r'^account/asd34y91lk0/data/?','data'),
+    url(r'^account/asd34y91lk0/profile/?','deskargar'),
+    url(r'^account/asd34y91lk0/wipe/?','wipeAccount'),
 )
