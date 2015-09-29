@@ -50,7 +50,7 @@ MEDIA_ROOT = ''
 
 MEDIA_URL = ''
 
-STATIC_ROOT = os.path.abspath(os.getcwd())+'/static'
+STATIC_ROOT = os.path.abspath(os.path.dirname(__file__))+'/static'
 
 STATIC_URL = '/static/'
 
