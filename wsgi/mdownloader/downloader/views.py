@@ -23,7 +23,7 @@ def isInside():
 		pass
 	return False
 	
-	
+"""
 def home(request,msg='',dwx='',mail=''):
     c = RequestContext(request)
     if not request.user.is_anonymous():
@@ -42,14 +42,22 @@ def home(request,msg='',dwx='',mail=''):
 				return render_to_response('tform.html',{'mail':mail,'dwx':dwx,'message':msg},context_instance=c)
         msg='...unable to connect'
     return render_to_response('auth.html',{'message':msg},context_instance=c)
+"""
+
+def home(request,msg='',dwx='',mail=''):
+	c = RequestContext(request)
+	if msg=='':
+		msg='ready....'
+	return render_to_response('tform.html',{'mail':mail,'dwx':dwx,'message':msg},context_instance=c)
 
 
-@login_required(login_url='/')
+
+#@login_required(login_url='/')
 def out(request):
     logout(request)
     return HttpResponseRedirect('/')
 
-@login_required(login_url='/')
+#@login_required(login_url='/')
 def data(request,msg=''):
 	c = RequestContext(request)
 	url=''
@@ -80,7 +88,7 @@ def data(request,msg=''):
 			pass
 	return home(request,msg='bad url ...',mail=mail,dwx=url)
 
-@login_required(login_url='/')
+#@login_required(login_url='/')
 def deskargar(request):
 	if request.method == 'POST':
 		url = request.POST["dwx"]
@@ -146,7 +154,7 @@ def smail(subject,message,ato,nurl,buf):
 def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for x in range(size))
 
-@login_required(login_url='/')
+#@login_required(login_url='/')
 def wipeAccount(request):
     import datetime
     import imaplib
