@@ -131,7 +131,7 @@ def downloadit(url,mail,start,end,size):
 				if i>=start:
 				    nurl = basename(url)+'.'+str(i)
 				    smail(nurl,'Hola',mail,id_generator(20),buf)
-				sleep(0.3)
+				sleep(1)
 				buf = response.read(size)
 			else:
 				break		    
