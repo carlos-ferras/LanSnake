@@ -1,0 +1,81 @@
+{% load staticfiles %}
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+	<head>
+		<title>LanSnake</title>
+        <link rel="shorcut icon" href="{% static 'img/shortcut.png' %}" />
+		<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+		<style type="text/css">
+
+			body{
+                background-image: url({% static 'img/background.jpg' %});
+                background-size: 100%;
+                background-repeat: no-repeat;
+            }
+
+            table{
+                width: 100%;
+                margin: 0;
+                padding: 0;
+            }
+
+            .field{
+                padding-top: 20px;
+            }
+
+            .field label{
+                display: block;
+            }
+
+            .field input{
+                margin-top: 5px;
+                width: 100%;
+                height: 30px;
+                border-radius: 0;
+                -webkit-box-shadow: none;
+                -moz-box-shadow: none;
+                box-shadow: none;
+            }
+
+            input[type="submit"],
+            a[type="button"]{
+                float: right;
+                margin-top: 50px;
+                border-radius: 0;
+                padding: 5px 12px;
+                background: #fff;
+                text-decoration: none;
+                font-size: 14px;
+                -webkit-box-shadow: none;
+                -moz-box-shadow: none;
+                box-shadow: none;
+                color: #343434;
+            }
+
+            #info{
+                color: #ff1c21;
+                background: rgba(255, 255, 255, 0.41);
+                padding:5px 10px;
+            }
+
+            a[type="button"]{
+                margin-right: 20px;
+            }
+		</style>
+        {% block style %}{% endblock %}
+	</head>
+
+	<body>
+		<form id="signup" action="{% block action %}{% endblock %}" method="post">
+            {% if msg %}
+                <div id="info">
+                    {{ msg }}
+                </div>
+            {% endif %}
+			{% block form %}{% endblock %}
+        </form>
+	</body>
+
+</html>

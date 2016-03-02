@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block style %}
+	<style>
+        form{
+            position: absolute;
+            top:20%;
+            left: 25%;
+            width: 50%;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 20px;
+        }
+
+        .field a{
+            color:orange;
+        }
+
+        #start{
+            width: 90%;
+        }
+
+        .end{
+            padding-left: 10%;
+        }
+
+        input[type="checkbox"]{
+            width: 0px;
+        }
+
+        .field span{
+            position: absolute;
+            margin-top: 10px;
+            margin-left: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block action %}/myaccount/profile/{% endblock %}
+
+
+{% block form %}
+    {% csrf_token %}
+    <table>
+        <tr>
+            <td class="field" colspan="2">
+                <label for="username">URL: <a title="{{ url }}" href="{{ url }}">{{ url }}</a></label>
+            </td>
+        </tr>
+        <tr>
+            <td class="field" colspan="2">
+                <label for="username">Mail: {{ mail }}</label>
+            </td>
+        </tr>
+        <tr>
+            <td class="field" colspan="2">
+                <label for="username">Size: {{ download_size }} MB</label>
+            </td>
+        </tr>
+        <tr>
+            <td class="field" colspan="2">
+                <label for="username">Packs: [ 0..{{ number_packs|add:-1 }}]</label>
+            </td>
+        </tr>
+        <tr>
+            <td class="field" colspan="2">
+                <input type="checkbox" value="1" name="cookies">
+                <span>Make it local</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="field">
+                <label for="start">From:</label>
+                <input id="start" type="number" min='0' max='{{ number_packs|add:-1 }}' value='0' name="start"/>
+            </td>
+            <td class="field end">
+                <label for="end">To:</label>
+                <input id="end" type="number" min='0'  max='{{ number_packs|add:-1 }}'  value='{{ number_packs|add:-1 }}' name="end"/>
+            </td>
+        </tr>
+    </table>
+
+    <input id="username" type="hidden" name="username" value={{ url }}>
+    <input id="mail" type="hidden" name="mail" value={{ mail }}>
+    <input id="age" type="hidden" name="age" value={{ attached_size }}>
+
+    <input type="submit" value="Send">
+    <a type="button" href="/myaccount/messages/" >Wipe</a>
+    <a type="button" href="/signout/" >Signout</a>
+    <a type="button" href="/">Home</a>
+{% endblock %}
+

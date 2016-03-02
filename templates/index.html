@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block style %}
+    <style>
+        form{
+            position: absolute;
+            top:5%;
+            right: 20px;
+            height: 80%;
+            width: 310px;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 20px;
+        }
+
+        #age{
+            width: 90%;
+        }
+
+        select{
+            margin-top: 5px;
+            height: 30px;
+            border-radius: 0;
+            -webkit-box-shadow: none;
+            -moz-box-shadow: none;
+            box-shadow: none;
+        }
+    </style>
+{% endblock %}
+
+{% block action %}/signup/{% endblock %}
+
+{% block form %}
+    {% csrf_token %}
+    <table>
+        <tr>
+            <td class="field" colspan="2">
+                <label for="username">User Name</label>
+                <input id="username" type="text" name="username" value='{{ url }}' />
+            </td>
+        </tr>
+        <tr>
+            <td class="field" colspan="2">
+                <label for="mail">Email</label>
+                <input id="mail" type="email" name="mail" value='{{ mail }}' />
+            </td>
+        </tr>
+        <tr>
+            <td class="field" colspan="2">
+                <label for="password">Password</label>
+                <input id="password" type="password" name="password" value='' />
+            </td>
+        </tr>
+        <tr>
+            <td class="field">
+                <label for="age">Age</label>
+                <input id="age" type="number" name="age" min='1' value='1' />
+            </td>
+            <td class="field right">
+                <label for="sex">Sex</label>
+                <select id="sex" name='sex' >
+                    <option value='M'>M</option>
+                    <option value='F' selected='selected'>F</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+    <input type="submit" value="Register">
+{% endblock %}
+
