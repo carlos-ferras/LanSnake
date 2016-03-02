@@ -4,7 +4,7 @@
 	<style>
         form{
             position: absolute;
-            top:20%;
+            top:10%;
             left: 25%;
             width: 50%;
             background: rgba(0, 0, 0, 0.6);
@@ -45,8 +45,8 @@
         <tr>
             <td class="field" colspan="2">
                 <label for="username">URL: <a title="{{ url }}" href="{{ url }}">
-			{% if url|length > 150 %}
-				{{ url|slice:":150" }}...
+			{% if url|length > 70 %}
+				{{ url|slice:":70" }}...
 			{% else %}
 				{{ url }}
 			{% endif %}
