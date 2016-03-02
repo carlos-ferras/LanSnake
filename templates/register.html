@@ -44,7 +44,13 @@
     <table>
         <tr>
             <td class="field" colspan="2">
-                <label for="username">URL: <a title="{{ url }}" href="{{ url }}">{{ url }}</a></label>
+                <label for="username">URL: <a title="{{ url }}" href="{{ url }}">
+			{% if url|length > 150 %}
+				{{ url|slice:":150" }}...
+			{% else %}
+				{{ url }}
+			{% endif %}
+		</a></label>
             </td>
         </tr>
         <tr>
